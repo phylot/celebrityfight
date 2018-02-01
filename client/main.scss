@@ -1,0 +1,359 @@
+html, body { margin: 0; font-family: Arial; }
+.center { text-align: center; }
+.mainHeading { 
+	z-index: 200;
+	margin: 0 0 40px 0; 
+	padding: 40px 0 0 0; 
+	text-align: center;
+	font-size: 15px;
+	font-weight: normal;
+	letter-spacing: 10px;
+	span {
+		display: block;
+		margin: 0 auto;
+		text-align: center;
+		font-family: Impact;
+		font-size: 56px;
+		font-weight: bold;
+	}
+}
+
+.gameBoard {
+	z-index: 100;
+	margin: 0;
+	.cardContainer {
+		position: relative;
+		width: 640px;
+		margin: 0 auto;
+		.card {
+			z-index: 700;
+			position: relative;
+			display: inline-block;
+			vertical-align: top;
+			width: 260px;
+			height: 384px;
+			margin: 0 10px;
+			.cardPlaceholder {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 260px;
+				height: 384px;
+				color: #d3d3d3;
+				.inner {
+					width: 250px;
+					height: 374px;
+					border: 5px dashed #d3d3d3;
+					.cardLogo {
+						transform: rotate(-10deg);
+						margin-top: 130px;
+						text-align: center;
+						font-size: 15px;
+						font-weight: normal;
+						letter-spacing: 10px;
+						span {
+							display: block;
+							margin: 0 auto;
+							text-align: center;
+							font-family: Impact;
+							font-size: 56px;
+							font-weight: bold;
+						}
+					}
+				}
+			}
+			.front { 
+				border: 5px solid #fff;
+				background-color: #f2f2f2;
+				box-shadow: 0px 0px 28px #000;
+			}
+			.back { 
+				border: 5px solid #000;
+				background-color: #fff;
+				overflow: hidden;
+				.cardLogo {
+					transform: rotate(-10deg);
+					margin-top: 130px;
+					text-align: center;
+					font-size: 15px;
+					font-weight: normal;
+					letter-spacing: 10px;
+					span {
+						display: block;
+						margin: 0 auto;
+						text-align: center;
+						font-family: Impact;
+						font-size: 56px;
+						font-weight: bold;
+					}
+				}
+			}
+			.cardImage { 
+				position: absolute;
+				top: 20px;
+				left: 50px;
+				width: 150px;
+				height: 150px;
+			}
+			.cardStats { 
+				position: absolute;
+				top: 170px;
+				left: 5px;
+				width: 240px;
+				.cardNumber, .cardTitle { text-align: center; }
+				h1.cardTitle { 
+					margin-top: 10px;
+					font-size: 18px;
+					white-space: nowrap;
+					overflow: hidden;
+				}
+				p.cardNumber { margin: 10px 0 0 0; }
+				.button {
+				    display: inline-block;
+				    width: 110px;
+				    margin: 5px;
+				    padding: 10px 10px;
+					border: none;
+				    text-align: center;
+				    text-decoration: none;
+				    font-size: 12px;
+				    cursor: pointer;
+				    background-color: LightGrey;
+				    span {
+				    	display: block;
+				    	font-size: 14px;
+				    	font-weight: bold;
+				    }
+				    &:hover { background-color: #e0e0e0; }
+					&.green {
+						background-color: Green;
+						color: #fff;
+					}
+					&.red {
+						background-color: Red;
+						color: #fff;
+					}
+					&:disabled, [disabled] { pointer-events: none; }
+				}
+			}
+			.playerMarker {
+				z-index: 810;
+				position: absolute;
+				top: -15px;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				font-weight: bold;
+				color: #fff;
+				background-color: #139cf2;
+				span {
+					display: block;
+					width: 50px;
+					height: 50px;
+					font-size: 20px;
+					line-height: 50px;
+					text-align: center;
+				}
+			}
+			&.playerOne .playerMarker { left: -15px; }
+			&.playerTwo .playerMarker { right: -15px; }
+			.flashOverlay {
+				display: none;
+				z-index: 800;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: Red;
+				opacity: 0.5;
+				&.blink {
+					display: block;
+					animation: blinker 0.2s linear infinite;
+				}
+				@keyframes blinker {  
+					50% { opacity: 0; }
+				}
+			}
+			.flip-container {
+				opacity: 1;
+				transform: translateX(0);
+				transition: none; /* no animation on class removal */
+				&.slideUp {
+					opacity: 0;
+					transform: translateY(-200px);  
+					transition: .2s linear all;
+				}
+			}
+			
+		}
+		.cardSeperator {
+		    display: inline-block;
+		    vertical-align: top;
+			width: 80px;
+		    height: 384px;
+		    line-height: 384px;
+		    text-align: center;
+		    font-family: Impact;
+		    font-size: 40px;
+		    font-weight: bold;
+		}
+		.deck {
+			z-index: 710;
+			position: absolute;
+			top: 0;
+			width: 262px;
+			height: 386px;
+			&.deckOne { 
+				left: -300px;
+				.deckCard.last.slideOut {
+  					opacity: 0;
+					transform: translateX(300px);  
+  					transition: .3s linear all;
+				}
+			}
+			&.deckTwo { 
+				right: -300px;
+				.deckCard.last.slideOut {
+  					opacity: 0;
+					transform: translateX(-300px);  
+  					transition: .3s linear all;
+				}
+			}
+			.deckCard {
+				position: absolute;
+				width: 260px;
+				height: 384px;
+				background-color: #fff;
+		  		border: 1px solid #fff;
+		  		&.first .inner {
+					border: 5px dashed #d3d3d3;
+					color: #d3d3d3;
+				}
+				&.last {
+					opacity: 1;
+					transform: translateX(0);
+  					transition: none; /* no animation on class removal */
+				}
+				&.animationCard {
+					opacity: 0;
+					top: -300px;
+					left: 0;
+  					transition: none; /* no animation on class removal */
+  					&.slideDown {
+  						opacity: 1;
+  						transform: translateY(300px);  
+  						transition: .3s linear all;
+  					}
+				}
+				.inner {
+					width: 250px;
+					height: 374px;
+					border: 5px solid #000;
+					.cardLogo {
+						transform: rotate(-10deg);
+						margin-top: 130px;
+						text-align: center;
+						font-size: 15px;
+						font-weight: normal;
+						letter-spacing: 10px;
+						span {
+							display: block;
+							margin: 0 auto;
+							text-align: center;
+							font-family: Impact;
+							font-size: 56px;
+							font-weight: bold;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+/* MODAL */
+.overlay {
+	display: none;
+	z-index: 900;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color:rgba(0, 0, 0, 0.5);
+	&.visible { display: block; }
+	.modal {
+		z-index: 910;
+		position: absolute;
+		top: 100px;
+		left: 50%;
+		width: 500px;
+		margin-left: -270px;
+		padding: 20px;
+		text-align: center;
+		background-color: #fff;
+		box-shadow:  0px 0px 40px black;
+		.button {
+		    display: inline-block;
+		    margin: 15px 2px;
+		    padding: 15px 32px;
+		    text-align: center;
+		    text-decoration: none;
+		    font-size: 16px;
+		    border: none;
+		    color: white;
+		    cursor: pointer;
+			background-color: #139cf2;
+			&:hover {
+				background-color: #3db0f7;
+			}
+		}
+	}
+}
+
+/* FLIP ANIMATION */
+/* entire container, keeps perspective */
+.flip-container {
+	perspective: 1000px;
+}
+/* flip the pane when hovered */
+/*.flip-container:hover .flipper, .flip-container.hover .flipper, */
+.flip-container.flip .flipper {
+	transform: rotateY(180deg);
+}
+
+/*.flip-container, .front, .back {
+	width: 260px;
+	height: 360px;
+}*/
+.flip-container {
+	width: 260px;
+	height: 384px;
+	.front, .back {
+		width: 250px;
+		height: 374px;
+	}
+}
+
+/* flip speed goes here */
+.flipper {
+	transition: 0.6s;
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+	backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+	z-index: 2;
+	/* for firefox 31 */
+	transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+	transform: rotateY(180deg);
+}
