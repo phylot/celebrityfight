@@ -1,8 +1,5 @@
 // TODO: Put all calls to backend api here
-// For now, simply export JSON or objects from here
-
-// TODO: Add Jean-Luc Picard, Wil Wheaton, William T Riker (Rikering a chair), Johnny Rico, Clint Eastwood, Daniel Radcliffe, Ron Weasley, Luke Skywalker, 
-// 
+// For now, simply export card JSON and any other object data from here
 
 export const cards = [
 {
@@ -15,7 +12,12 @@ export const cards = [
       {"attribute":"intelligence","value":95,"label":"Intelligence"},
       {"attribute":"speed","value":5,"label":"Speed"}
   ],
-  "ability": "WISDOM",
+  "abilityPresent": true,
+  "abilityUsed": false,
+  "abilityType": "STATSHOW",
+  "ability": "FORESIGHT",
+  "abilityLabel": "Foresight",
+  "abilityDescription": "See one random stat on your opponent's card",
   "image": "/client/img/freeman.jpg"
 },
 {
@@ -28,7 +30,7 @@ export const cards = [
       {"attribute":"intelligence","value":78,"label":"Intelligence"},
       {"attribute":"speed","value":85,"label":"Speed"}
   ],
-  "ability": "BUGGER",
+  "abilityPresent": false,
   "image": "/client/img/bean.jpg"
 },
 {
@@ -41,7 +43,12 @@ export const cards = [
       {"attribute":"intelligence","value":98,"label":"Intelligence"},
       {"attribute":"speed","value":55,"label":"Speed"}
   ],
-  "ability": "MAKEITSO",
+  "abilityPresent": true,
+  "abilityUsed": false,
+  "abilityType": "STATSHOW",
+  "ability": "FORESIGHT",
+  "abilityLabel": "Foresight",
+  "abilityDescription": "See one random stat on your opponent's card",
   "image": "/client/img/picard.jpg"
 },
 {
@@ -67,6 +74,8 @@ export const cards = [
       {"attribute":"intelligence","value":89,"label":"Intelligence"},
       {"attribute":"speed","value":62,"label":"Speed"}
   ],
+  "abilityPresent": true,
+  "abilityUsed": false,
   "abilityType": "STRENGTHREDUCER",
   "ability": "RAPTORATTACK",
   "abilityLabel": "Raptor Attack",
@@ -83,7 +92,7 @@ export const cards = [
       {"attribute":"intelligence","value": 81,"label":"Intelligence"},
       {"attribute":"speed","value": 93,"label":"Speed"}
   ],
-  "ability": "RAP",
+  "abilityPresent": false,
   "image": "/client/img/willsmith.jpg"
 },
 {
@@ -96,7 +105,7 @@ export const cards = [
       {"attribute":"intelligence","value": 92,"label":"Intelligence"},
       {"attribute":"speed","value": 96,"label":"Speed"}
   ],
-  "ability": "BOND",
+  "abilityPresent": false,
   "image": "/client/img/brosnan.jpg"
 },
 {
@@ -109,7 +118,7 @@ export const cards = [
       {"attribute":"intelligence","value":45,"label":"Intelligence"},
       {"attribute":"speed","value":91,"label":"Speed"}
   ],
-  "ability": "INTIMIDATE",
+  "abilityPresent": false,
   "image": "/client/img/vin.jpg"
 },
 {
@@ -122,7 +131,7 @@ export const cards = [
       {"attribute":"intelligence","value": 56,"label":"Intelligence"},
       {"attribute":"speed","value": 63,"label":"Speed"}
   ],
-  "ability": "BRO",
+  "abilityPresent": false,
   "image": "/client/img/randy.jpg"
 },
 {
@@ -148,7 +157,7 @@ export const cards = [
       {"attribute":"intelligence","value":35,"label":"Intelligence"},
       {"attribute":"speed","value":20,"label":"Speed"}
   ],
-  "ability": "MUMBLE",
+  "abilityPresent": false,
   "image": "/client/img/bishop.jpg"
 },
 {
@@ -161,7 +170,7 @@ export const cards = [
       {"attribute":"intelligence","value":78,"label":"Intelligence"},
       {"attribute":"speed","value":88,"label":"Speed"}
   ],
-  "ability": "JUSTDOIT",
+  "abilityPresent": false,
   "image": "/client/img/shia.jpg"
 },
 {
@@ -174,7 +183,7 @@ export const cards = [
       {"attribute":"intelligence","value":86,"label":"Intelligence"},
       {"attribute":"speed","value":80,"label":"Speed"}
   ],
-  "ability": "CRUSHER",
+  "abilityPresent": false,
   "image": "/client/img/wheaton.jpg"
 },
 {
@@ -200,7 +209,7 @@ export const cards = [
       {"attribute":"intelligence","value":71,"label":"Intelligence"},
       {"attribute":"speed","value":91,"label":"Speed"}
   ],
-  "ability": "YOUKNOWNOTHING",
+  "abilityPresent": false,
   "image": "/client/img/jonsnow.jpg"
 },
 {
@@ -213,7 +222,12 @@ export const cards = [
       {"attribute":"intelligence","value":96,"label":"Intelligence"},
       {"attribute":"speed","value":30,"label":"Speed"}
   ],
-  "ability": "KNEEBITE",
+  "abilityPresent": true,
+  "abilityUsed": false,
+  "abilityType": "STATSHOW",
+  "ability": "FORESIGHT",
+  "abilityLabel": "Foresight",
+  "abilityDescription": "See one random stat on your opponent's card",
   "image": "/client/img/tyrion.jpg"
 },
 {
@@ -226,7 +240,7 @@ export const cards = [
       {"attribute":"intelligence","value":87,"label":"Intelligence"},
       {"attribute":"speed","value":28,"label":"Speed"}
   ],
-  "ability": "DENCH",
+  "abilityPresent": false,
   "image": "/client/img/dench.jpg"
 },
 {
@@ -239,6 +253,8 @@ export const cards = [
       {"attribute":"intelligence","value":100,"label":"Intelligence"},
       {"attribute":"speed","value":17,"label":"Speed"}
   ],
+  "abilityPresent": true,
+  "abilityUsed": false,
   "abilityType": "STATSHOW",
   "ability": "FORESIGHT",
   "abilityLabel": "Foresight",
@@ -255,7 +271,7 @@ export const cards = [
       {"attribute":"intelligence","value":91,"label":"Intelligence"},
       {"attribute":"speed","value":43,"label":"Speed"}
   ],
-  "ability": "LACKOFFAITH",
+  "abilityPresent": false,
   "image": "/client/img/vader.jpg"
 },
 {
@@ -268,6 +284,6 @@ export const cards = [
       {"attribute":"intelligence","value":90,"label":"Intelligence"},
       {"attribute":"speed","value":89,"label":"Speed"}
   ],
-  "ability": "BITCH",
+  "abilityPresent": false,
   "image": "/client/img/ripley.jpg"
 }];

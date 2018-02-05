@@ -72,6 +72,7 @@ html, body { margin: 0; font-family: Arial; }
 				background-color: #fff;
 				overflow: hidden;
 				.cardLogo {
+					z-index: 720;
 					transform: rotate(-10deg);
 					margin-top: 130px;
 					text-align: center;
@@ -84,6 +85,28 @@ html, body { margin: 0; font-family: Arial; }
 						text-align: center;
 						font-family: Impact;
 						font-size: 56px;
+						font-weight: bold;
+					}
+				}
+				.statContainer{
+					opacity: 0;
+					z-index: 730;
+					position: absolute;
+					top: 15px;
+					left: 50px;
+					width: 120px;
+					padding: 10px;
+					text-align: center;
+					background-color: LightGrey;
+					border: 5px solid #000;
+					transition: none; /* no animation on class removal */
+					&.visible{
+						opacity: 1;
+						transition: opacity .5s ease-in;
+					}
+					.statValue {
+						display: block;
+						font-size: 26px;
 						font-weight: bold;
 					}
 				}
@@ -108,32 +131,47 @@ html, body { margin: 0; font-family: Arial; }
 					overflow: hidden;
 				}
 				p.cardNumber { margin: 10px 0 0 0; }
-				.button {
-				    display: inline-block;
-				    width: 110px;
-				    margin: 5px;
-				    padding: 10px 10px;
-					border: none;
-				    text-align: center;
-				    text-decoration: none;
-				    font-size: 12px;
-				    cursor: pointer;
-				    background-color: LightGrey;
-				    span {
-				    	display: block;
-				    	font-size: 14px;
-				    	font-weight: bold;
-				    }
-				    &:hover { background-color: #e0e0e0; }
-					&.green {
-						background-color: Green;
-						color: #fff;
+				.cardButtons {
+					position: relative;
+					.button {
+					    display: inline-block;
+					    width: 110px;
+					    margin: 5px;
+					    padding: 10px 10px;
+						border: none;
+					    text-align: center;
+					    text-decoration: none;
+					    font-size: 12px;
+					    cursor: pointer;
+					    background-color: LightGrey;
+					    &.abilityButton {
+							position: absolute;
+							display: block;
+							top: -120px;
+							right: -20px;
+							height: 54px;
+						    font-size: 14px;
+						    font-weight: bold;
+						    background-color: LightBlue;
+						    text-shadow: 0 1px #daedf2;
+						    &:hover { background-color: #bfe6f2; }
+						}
+					    span {
+					    	display: block;
+					    	font-size: 14px;
+					    	font-weight: bold;
+					    }
+					    &:hover { background-color: #e0e0e0; }
+						&.green {
+							background-color: Green;
+							color: #fff;
+						}
+						&.red {
+							background-color: Red;
+							color: #fff;
+						}
+						&:disabled, [disabled] { pointer-events: none; }
 					}
-					&.red {
-						background-color: Red;
-						color: #fff;
-					}
-					&:disabled, [disabled] { pointer-events: none; }
 				}
 			}
 			.playerMarker {

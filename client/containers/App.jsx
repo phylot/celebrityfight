@@ -1,119 +1,9 @@
-"use strict";
-
 import React from 'react';
-import './app.scss'; // Component-specific CSS
-import {cards} from '../api.js'; // Get data
-
-function Button(props) { // TODO: Turn in CardButton class + make a ModalButton class also. Could abstract the Button further, then reuse this in both?
-	return (
-    <button disabled={props.disabled} className={'button' + ( props.info.win ? ' green' : '' ) + '' + ( props.info.lose ? ' red' : '' )} 
-    onClick={props.onClick}>
-    	{props.info.label}<span>{props.info.value}</span>
-    </button>
-	);
-}
-
-export class Modal extends React.Component {
-	render() {
-		return (
-			<div className={'overlay' + ( this.props.visible ? ' visible' : '' )}>
-				<div className='modal'>
-					<h1>{this.props.content.heading}</h1>
-					<h2>{this.props.content.subHeading}</h2>
-					<p>{this.props.content.paragraph}</p>
-					<button onClick={this.props.onClick} className='button'>{this.props.content.button}</button>
-				</div>
-			</div>
-		)
-	}
-}
-
-export class Card extends React.Component {
-	renderButton(stat, disabled, index) {
-		return (
-			<Button info={stat} onClick={() => this.props.onClick(stat, index)} disabled={disabled} />
-		);
-	}
-	// TODO: Better way to render buttons by repeating through this.props.value.stats array, similar to ng-repeat?
-	// - Then might be able to get index of clicked button dynamically, rather than passing it as a parameter manually
-	render() {
-		return (
-			<div className={'card ' + this.props.styleName}>
-				<div className='cardPlaceholder'>
-					<div className='inner'>
-        		<div className='cardLogo'>CELEBRITY<span>FIGHT</span></div>
-        	</div>
-				</div>
-				<div className={'flip-container' + (this.props.flipped ? ' flip' : '') + (this.props.slideUp ? ' slideUp' : '')}>
-					<div className='flipper'>
-						<div className='front'>
-							<div className='playerMarker'><span>{this.props.markerText}</span></div>
-							<div className={'flashOverlay' + (this.props.flash ? ' blink' : '')}></div>
-							<img className='cardImage' key={this.props.value.image} src={this.props.value.image} alt={this.props.value.name} />
-							<div className='cardStats'>
-								<p className='cardNumber'>{this.props.value.number}</p>
-								<h1 className='cardTitle'>{this.props.value.name}</h1>
-								<div className='cardButtons'>
-									{this.renderButton(this.props.value.stats[0], this.props.disabled, 0)}
-									{this.renderButton(this.props.value.stats[1], this.props.disabled, 1)}
-									{this.renderButton(this.props.value.stats[2], this.props.disabled, 2)}
-									{this.renderButton(this.props.value.stats[3], this.props.disabled, 3)}
-								</div>
-							</div>
-						</div>
-						<div className='back'>
-							<div className='cardLogo'>CELEBRITY<span>FIGHT</span></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
-}
-
-export class Deck extends React.Component {
-	render() {
-		var offsetDirection = this.props.offsetDirection,
-				pixelOffset = 0,
-				slideOut = this.props.slideOut,
-				slideDown = this.props.slideDown;
-		var deckItems = this.props.cards.map(function(item, index, arr) {
-
-			var deckCardStyle = {
-			  top: '-'+ pixelOffset +'px',
-			  [offsetDirection]: '-'+ pixelOffset +'px'
-			  // WebkitTransition: 'all', // note the capital 'W' here
-			  // msTransition: 'all' // 'ms' is the only lowercase vendor prefix
-			};
-			if (index !== 0) { // Don't increase offset until after second card
-				pixelOffset = pixelOffset + 6;
-			}
-
-      return (
-        <div key={item.code} 
-        className={'deckCard' + (index == 0 ? ' first' : '') + 
-        (arr.length - 1 === index ? ' last' : '') + 
-        ((slideOut && arr.length - 1 === index) ? ' slideOut' : '')} 
-        style={deckCardStyle}>
-        	<div className='inner'>
-        		<div className='cardLogo'>CELEBRITY<span>FIGHT</span></div>
-        	</div>
-        </div>
-      );
-    });
-
-		return (
-			<div className={'deck ' + this.props.cssClass}>
-				<div className={'deckCard animationCard' + (slideDown ? ' slideDown' : '')}>
-					<div className='inner'>
-        		<div className='cardLogo'>CELEBRITY<span>FIGHT</span></div>
-        	</div>
-				</div>
-				{deckItems}
-			</div>
-		)
-	}
-}
+import {Card} from '../components/Card.jsx';
+import {Deck} from '../components/Deck.jsx';
+import {Modal} from '../components/Modal.jsx';
+import './app.scss'; // Component-specific CSS - TODO: Separate out into component-specific files
+import {cards} from '../api.js'; // Get data - TODO: AJAX call (use a new separate container?)
 
 export class Game extends React.Component {
 	constructor(props) {
@@ -138,28 +28,37 @@ export class Game extends React.Component {
       cardTwoFlash: false,
       cardSlideOut: false,
       cardSlideUp: false,
-      cardSlideDown: false
+      cardSlideDown: false,
+      randomStat: {}
     };
-    this.resetGame = this.resetGame.bind(this); // Need to bind this method for 'this' context... for SOME REASON??? Other methods don't require binding?
-    this.hideModal = this.hideModal.bind(this); // ... and this
+    this.resetGame = this.resetGame.bind(this); // Need to bind these methods for 'this' context... for SOME REASON??? 
+    this.hideModal = this.hideModal.bind(this); // ... Other methods (renderCards, handleClick, handleAbilityClick) don't require binding?!?!?!?
   }
 
 	renderCards() {
 
-		const deckOne = this.state.playerDecks[0]; // Required? - Should I just pass this.state.playerDecks[0] directly below?
-		const deckTwo = this.state.playerDecks[1];
+		const deckOne = this.state.playerDecks[0], // Required? - Should I just pass this.state.playerDecks[0] directly below?
+					deckTwo = this.state.playerDecks[1];
+		var cardOneDisabled = !this.state.playerOneTurn || !this.state.turnOpen,
+				cardTwoDisabled = this.state.playerOneTurn || !this.state.turnOpen,
+				cardOneFlipped = (!this.state.playerOneTurn && !this.state.showBothCards) || this.state.hideBothCards,
+				cardTwoFlipped = (this.state.playerOneTurn && !this.state.showBothCards) || this.state.hideBothCards,
+				cardOneSlideUp = this.state.playerTwoWin && this.state.cardSlideUp,
+				cardTwoSlideUp = this.state.playerOneWin && this.state.cardSlideUp,
+				cardOneStatVisible = !this.state.playerOneTurn && this.state.randomStat.statVisible,
+				cardTwoStatVisible = this.state.playerOneTurn && this.state.randomStat.statVisible;
 
 		return (
 			<div className='cardContainer'>
-				<Card value={deckOne[0]} onClick={(stat, index) => this.handleClick(stat, index)} styleName='playerOne' markerText='P1' 
-				disabled={!this.state.playerOneTurn || !this.state.turnOpen} 
-				flipped={(!this.state.playerOneTurn && !this.state.showBothCards) || this.state.hideBothCards} 
-				flash={this.state.cardOneFlash} slideUp={this.state.playerTwoWin && this.state.cardSlideUp} />
+				<Card value={deckOne[0]} styleName='playerOne' markerText='P1' 
+				onClick={(stat, index) => this.handleClick(stat, index)} abilityClick={(card) => this.handleAbilityClick(card)}
+				disabled={cardOneDisabled} flipped={cardOneFlipped} flash={this.state.cardOneFlash} slideUp={cardOneSlideUp} 
+				randomStat={this.state.randomStat} statVisible={cardOneStatVisible} />
 				<div className='cardSeperator'>Vs</div>
-				<Card value={deckTwo[0]} onClick={(stat, index) => this.handleClick(stat, index)} styleName='playerTwo' markerText='P2' 
-				disabled={this.state.playerOneTurn || !this.state.turnOpen} 
-				flipped={(this.state.playerOneTurn && !this.state.showBothCards) || this.state.hideBothCards} 
-				flash={this.state.cardTwoFlash} slideUp={this.state.playerOneWin && this.state.cardSlideUp} />
+				<Card value={deckTwo[0]} styleName='playerTwo' markerText='P2' 
+				onClick={(stat, index) => this.handleClick(stat, index)} abilityClick={(card) => this.handleAbilityClick(card)}
+				disabled={cardTwoDisabled} flipped={cardTwoFlipped} flash={this.state.cardTwoFlash} slideUp={cardTwoSlideUp} 
+				randomStat={this.state.randomStat} statVisible={cardTwoStatVisible} />
 				<Deck cards={deckOne} cssClass={'deckOne'} offsetDirection={'left'} slideOut={this.state.cardSlideOut} 
 				slideDown={this.state.playerOneWin && this.state.cardSlideDown} />
 				<Deck cards={deckTwo} cssClass={'deckTwo'} offsetDirection={'right'} slideOut={this.state.cardSlideOut} 
@@ -236,7 +135,8 @@ export class Game extends React.Component {
 			setTimeout(() => { // Timeout, then stop card flashing, 2000ms
 				this.setState({
 					cardOneFlash: false,
-					cardTwoFlash: false
+					cardTwoFlash: false,
+					randomStat: { statVisible: false }
 				});
 
 				if (opponentDeck.length < 2 && currentPlayerWin) { // If somebody loses the game ... TODO: Better logic
@@ -269,7 +169,7 @@ export class Game extends React.Component {
 					}, 4000);
 
 				} else {
-
+					// Animations and card array manipulation
 					setTimeout(() => { // Else no winner, timeout, then hide the player's card who's turn it isn't, 3000ms
 						this.setState({
 					  	showBothCards: false
@@ -281,7 +181,6 @@ export class Game extends React.Component {
 							  }, () => {
 
 							  	setTimeout(() => { // Timeout, then animate card entering winner's deck, 200ms
-							  		
 										var wonCard = losingDeck[0]; // Copy won card from loser's deck
 										winningDeck.push(wonCard); // Add card to winner's deck
 						  			this.setState({
@@ -295,10 +194,6 @@ export class Game extends React.Component {
 												winningDeck.push(winningDeck.shift()); // Put winner's current card to back of their deck
 												losingStat.lose = false; // Clear stat highlights
 												winningStat.win = false;
-												// console.log('winningDeck: ', winningDeck);
-												// console.log('losingDeck: ', losingDeck);
-												// console.log('playerOneDeck: ', playerOneDeck);
-												// console.log('playerTwoDeck: ', playerTwoDeck);
 												
 												setTimeout(() => { // Timeout, then update array states, remove slideOut animation CSS classes, next turn open, 300ms
 													this.setState({
@@ -310,22 +205,44 @@ export class Game extends React.Component {
 												  });
 												}, 300);
 											}, 1000);
-										
 										});
 									}, 200);
-
 								});
 					  	}, 500);
-
 					  });
 					}, 3000);
-
 				}
-
 			}, 2000);
-
 		});
+	}
 
+	handleAbilityClick(card) {
+		
+		var type = card.abilityType, 
+				ability = card.ability,
+				cardDecks = JSON.parse(JSON.stringify(this.state.playerDecks)), // Create copy of card arrays, without object references
+				playerCard = this.state.playerOneTurn ? cardDecks[0][0] : cardDecks[1][0],
+				opponentCard = this.state.playerOneTurn ? cardDecks[1][0] : cardDecks[0][0];
+
+		// Set ability to used 
+		playerCard.abilityUsed = true;
+		this.setState({
+			playerDecks: [cardDecks[0], cardDecks[1]]
+		}, () => {
+			// Evaluate type of ability - TODO: Somehow use a predicate object to match abilityType to a method that should be used
+			if (type == 'STATSHOW') {
+				// Choose random stat from opponentCard.stats (IDEA: could quickly cycle 4 icons, getting slower, like Mario Kart powerups)
+				var stat = getRandomStat(opponentCard.stats);
+				// Make the stat container visible above opponent's card
+				this.setState({
+					randomStat: {
+						label: stat.label,
+						value: stat.value,
+						statVisible: true
+					}
+				});
+			}
+		});
 	}
 
 	resetGame() {
@@ -357,10 +274,6 @@ export class Game extends React.Component {
 			  });
 			}, 1000);
 		});
-	}
-
-	showModal(modalObj) {
-		// TODO: Make a method to handle the various modal states... may not save much code as still need to define the modal content object
 	}
 
 	hideModal() {
@@ -420,8 +333,17 @@ function shuffleCards() { // TODO: Pass 'cards' in here as a param?
 	return [playerOneDeck, playerTwoDeck];
 }
 
-function compareCards(valueOne, valueTwo) { // Should this be a method of Game?
+function chooseLeadPlayer() {
+	var randNum = Math.random(),
+			result;
+	if (randNum < 0.5) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
+function compareCards(valueOne, valueTwo) { // Should this be a method of Game?
 	if (valueOne >= valueTwo) {
 		return true;
 
@@ -431,16 +353,7 @@ function compareCards(valueOne, valueTwo) { // Should this be a method of Game?
 	//TOOO: Create draw condition here, and logic for a sidePile in 'Game' class
 }
 
-function chooseLeadPlayer(callback) {
-	var randNum = Math.random(),
-			result;
-	if (randNum < 0.5) {
-		result = true;
-		return true;
-	} else {
-		result = false;
-		return false;
-	}
-	// console.log('callback');
-	callback(result);
+function getRandomStat(stats) {
+	var randomStat = stats[Math.floor(Math.random()*stats.length)];
+	return randomStat;
 }
