@@ -29,7 +29,13 @@ export class Game extends React.Component {
       cardSlideOut: false,
       cardSlideUp: false,
       cardSlideDown: false,
-      randomStat: {}
+      randomStat: {},
+      speechBubbleVisible: false,
+      cardDamage: {
+      	visible: false,
+      	statName: '',
+      	damageValue: 0
+      }
     };
     this.resetGame = this.resetGame.bind(this); // Need to bind these methods for 'this' context... for SOME REASON??? 
     this.hideModal = this.hideModal.bind(this); // ... Other methods (renderCards, handleClick, handleAbilityClick) don't require binding?!?!?!?
@@ -46,19 +52,25 @@ export class Game extends React.Component {
 				cardOneSlideUp = this.state.playerTwoWin && this.state.cardSlideUp,
 				cardTwoSlideUp = this.state.playerOneWin && this.state.cardSlideUp,
 				cardOneStatVisible = !this.state.playerOneTurn && this.state.randomStat.statVisible,
-				cardTwoStatVisible = this.state.playerOneTurn && this.state.randomStat.statVisible;
+				cardTwoStatVisible = this.state.playerOneTurn && this.state.randomStat.statVisible,
+				cardOneSpeechVisible = this.state.playerOneTurn && this.state.speechBubbleVisible,
+				cardTwoSpeechVisible = !this.state.playerOneTurn && this.state.speechBubbleVisible,
+				cardOneDamageVisible = !this.state.playerOneTurn && this.state.cardDamage.visible,
+				cardTwoDamageVisible = this.state.playerOneTurn && this.state.cardDamage.visible;
 
 		return (
 			<div className='cardContainer'>
-				<Card value={deckOne[0]} styleName='playerOne' markerText='P1' 
+				<Card cardData={deckOne[0]} styleName='playerOne' markerText='P1' 
 				onClick={(stat, index) => this.handleClick(stat, index)} abilityClick={(card) => this.handleAbilityClick(card)}
 				disabled={cardOneDisabled} flipped={cardOneFlipped} flash={this.state.cardOneFlash} slideUp={cardOneSlideUp} 
-				randomStat={this.state.randomStat} statVisible={cardOneStatVisible} />
+				randomStat={this.state.randomStat} statVisible={cardOneStatVisible} speechVisible={cardOneSpeechVisible} 
+				damage={this.state.cardDamage} damageVisible={cardOneDamageVisible} />
 				<div className='cardSeperator'>Vs</div>
-				<Card value={deckTwo[0]} styleName='playerTwo' markerText='P2' 
+				<Card cardData={deckTwo[0]} styleName='playerTwo' markerText='P2' 
 				onClick={(stat, index) => this.handleClick(stat, index)} abilityClick={(card) => this.handleAbilityClick(card)}
 				disabled={cardTwoDisabled} flipped={cardTwoFlipped} flash={this.state.cardTwoFlash} slideUp={cardTwoSlideUp} 
-				randomStat={this.state.randomStat} statVisible={cardTwoStatVisible} />
+				randomStat={this.state.randomStat} statVisible={cardTwoStatVisible} speechVisible={cardTwoSpeechVisible} 
+				damage={this.state.cardDamage} damageVisible={cardTwoDamageVisible} />
 				<Deck cards={deckOne} cssClass={'deckOne'} offsetDirection={'left'} slideOut={this.state.cardSlideOut} 
 				slideDown={this.state.playerOneWin && this.state.cardSlideDown} />
 				<Deck cards={deckTwo} cssClass={'deckTwo'} offsetDirection={'right'} slideOut={this.state.cardSlideOut} 
@@ -175,12 +187,12 @@ export class Game extends React.Component {
 					  	showBothCards: false
 					  }, () => {
 
-					  	setTimeout(() => { // Timeout, then animate losing card vertically, 500ms
+					  	setTimeout(() => { // Timeout, then animate losing card vertically, 600ms
 					  		this.setState({
 							  	cardSlideUp: true
 							  }, () => {
 
-							  	setTimeout(() => { // Timeout, then animate card entering winner's deck, 200ms
+							  	setTimeout(() => { // Timeout, then animate card entering winner's deck, 600ms
 										var wonCard = losingDeck[0]; // Copy won card from loser's deck
 										winningDeck.push(wonCard); // Add card to winner's deck
 						  			this.setState({
@@ -195,7 +207,7 @@ export class Game extends React.Component {
 												losingStat.lose = false; // Clear stat highlights
 												winningStat.win = false;
 												
-												setTimeout(() => { // Timeout, then update array states, remove slideOut animation CSS classes, next turn open, 300ms
+												setTimeout(() => { // Timeout, then update array states, remove slideOut animation CSS classes, next turn open, 600ms
 													this.setState({
 												  	playerDecks: [playerOneDeck, playerTwoDeck],
 												  	cardSlideUp: false,
@@ -203,12 +215,12 @@ export class Game extends React.Component {
 												  	cardSlideOut: false,
 												  	turnOpen: true
 												  });
-												}, 300);
+												}, 600);
 											}, 1000);
 										});
-									}, 200);
+									}, 600);
 								});
-					  	}, 500);
+					  	}, 600);
 					  });
 					}, 3000);
 				}
@@ -226,23 +238,82 @@ export class Game extends React.Component {
 
 		// Set ability to used 
 		playerCard.abilityUsed = true;
-		this.setState({
-			playerDecks: [cardDecks[0], cardDecks[1]]
+
+		this.setState({ 
+			turnOpen: false,
+			playerDecks: [cardDecks[0], cardDecks[1]],
+			speechBubbleVisible: true 
 		}, () => {
-			// Evaluate type of ability - TODO: Somehow use a predicate object to match abilityType to a method that should be used
-			if (type == 'STATSHOW') {
-				// Choose random stat from opponentCard.stats (IDEA: could quickly cycle 4 icons, getting slower, like Mario Kart powerups)
-				var stat = getRandomStat(opponentCard.stats);
-				// Make the stat container visible above opponent's card
+			setTimeout(() => { // Timeout while SpeechBubble displays/animates, then ability functionality, 3000ms
 				this.setState({
-					randomStat: {
-						label: stat.label,
-						value: stat.value,
-						statVisible: true
+					speechBubbleVisible: false
+				}, () => {
+					// Evaluate type of ability - TODO: Somehow use a predicate object to match abilityType to a method that should be used
+					if (type == 'STATSHOW') {
+						// Choose random stat from opponentCard.stats
+						var stat = getRandomStat(opponentCard.stats);
+						// Make the stat container visible above opponent's card
+						this.setState({
+							randomStat: {
+								label: stat.label,
+								value: stat.value,
+								statVisible: true
+							}
+						}, () => {
+							setTimeout(() => {
+								this.setState({ turnOpen: true });
+							}, 500);
+						});
+					}
+					if (type == 'STRENGTHDAMAGE') {
+						// Find strength attribute value on opponent's card
+						var strengthAttribute = opponentCard.stats.filter(function( obj ) {
+						  return obj.attribute == 'strength';
+						});
+						var newStrengthValue = Math.round(strengthAttribute[0].value / 2);
+						var strengthReduction = strengthAttribute[0].value - newStrengthValue;
+
+						strengthAttribute[0].value = newStrengthValue; // This updates the view without setState()... somehow
+						strengthAttribute[0].decreased = true;
+						if (this.state.playerOneTurn) {
+							this.setState({ cardTwoFlash: true });
+						} else {
+							this.setState({ cardOneFlash: true });
+						}
+
+						setTimeout(() => { // Timeout, then stop card flashing, 2000ms
+							this.setState({
+								cardOneFlash: false,
+								cardTwoFlash: false
+							}, () => {
+								// Display strengthReduction value
+								this.setState({
+									cardDamage: {
+						      	visible: true,
+						      	// cardOne: this.state.playerOneTurn ? false : true,
+						      	statName: strengthAttribute[0].label,
+						      	damageValue: strengthReduction
+						      }
+						    }, () => {
+						    	setTimeout(() => { // Timeout, then hide hide card damage, 2000ms
+						    		this.setState({
+											turnOpen: true,
+						    			cardDamage: {
+						    				visible: false,
+						    				statName: strengthAttribute[0].label, // TODO: - Need a better way to set state...
+						      			damageValue: strengthReduction // ...rather than repeating setState object properties above
+						    			}
+						    		});
+						    	}, 2000);
+						    });
+							});
+						}, 2000);
+						
 					}
 				});
-			}
+			}, 3000);
 		});
+
 	}
 
 	resetGame() {

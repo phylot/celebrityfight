@@ -26,7 +26,7 @@ html, body { margin: 0; font-family: Arial; }
 		width: 640px;
 		margin: 0 auto;
 		.card {
-			z-index: 700;
+			z-index: 600;
 			position: relative;
 			display: inline-block;
 			vertical-align: top;
@@ -70,9 +70,9 @@ html, body { margin: 0; font-family: Arial; }
 			.back { 
 				border: 5px solid #000;
 				background-color: #fff;
-				overflow: hidden;
+				/*overflow: hidden;*/
 				.cardLogo {
-					z-index: 720;
+					z-index: 620;
 					transform: rotate(-10deg);
 					margin-top: 130px;
 					text-align: center;
@@ -88,9 +88,9 @@ html, body { margin: 0; font-family: Arial; }
 						font-weight: bold;
 					}
 				}
-				.statContainer{
+				.statContainer {
 					opacity: 0;
-					z-index: 730;
+					z-index: 630;
 					position: absolute;
 					top: 15px;
 					left: 50px;
@@ -110,8 +110,38 @@ html, body { margin: 0; font-family: Arial; }
 						font-weight: bold;
 					}
 				}
+				.damageBox {
+					/*opacity: 0;*/
+					z-index: 640;
+					position: absolute;
+					width: 100%;
+					top: 30px;
+					left: 0;
+					text-align: center;
+					font-weight: bold;
+					color: Red;
+					transtion: none;
+					p { margin: 4px; }
+					.damageValue {
+						position: relative;
+						display: inline-block;
+						font-size: 24px;
+						.icon {
+							position: absolute;
+							top: 0;
+							left: -12px;
+						}
+					}
+					&.visible { opacity: 1; }
+					&.hide {
+						opacity: 0;
+						transform: translateY(-80px);
+						transition: 1s ease-out all;
+					}
+				}
 			}
 			.cardImage { 
+				z-index: 710;
 				position: absolute;
 				top: 20px;
 				left: 50px;
@@ -134,34 +164,37 @@ html, body { margin: 0; font-family: Arial; }
 				.cardButtons {
 					position: relative;
 					.button {
-					    display: inline-block;
-					    width: 110px;
-					    margin: 5px;
-					    padding: 10px 10px;
+						display: inline-block;
+						width: 110px;
+						margin: 5px;
+						padding: 10px 10px;
 						border: none;
-					    text-align: center;
-					    text-decoration: none;
-					    font-size: 12px;
-					    cursor: pointer;
-					    background-color: LightGrey;
-					    &.abilityButton {
+						text-align: center;
+						text-decoration: none;
+						font-size: 12px;
+						cursor: pointer;
+						background-color: LightGrey;
+						&.abilityButton {
+							z-index: 720;
 							position: absolute;
 							display: block;
 							top: -120px;
 							right: -20px;
 							height: 54px;
-						    font-size: 14px;
-						    font-weight: bold;
-						    background-color: LightBlue;
-						    text-shadow: 0 1px #daedf2;
-						    &:hover { background-color: #bfe6f2; }
+							font-size: 14px;
+							font-weight: bold;
+							background-color: LightBlue;
+							text-shadow: 0 1px #daedf2;
+							&:hover { background-color: #bfe6f2; }
 						}
-					    span {
-					    	display: block;
+					   .statValue {
+					   	position: relative;
+					   	display: block;
 					    	font-size: 14px;
 					    	font-weight: bold;
-					    }
-					    &:hover { background-color: #e0e0e0; }
+					    	/*.decreasArrow { display: none; }*/
+					   }
+					   &:hover { background-color: #e0e0e0; }
 						&.green {
 							background-color: Green;
 							color: #fff;
@@ -169,6 +202,25 @@ html, body { margin: 0; font-family: Arial; }
 						&.red {
 							background-color: Red;
 							color: #fff;
+						}
+						&.decreased { 
+							color: Red;
+							/* CSS triangle */
+							.decreaseArrow {
+								display: block;
+								position: absolute;
+								top: 4px;
+								left: 8px;
+								width: 0; 
+								height: 0; 
+								border-left: 8px solid transparent;
+								border-right: 8px solid transparent;
+								border-top: 8px solid Red;
+							}
+							&.red, &.green { 
+								color: #fff;
+								.decreaseArrow { border-top-color: #fff; }
+							}
 						}
 						&:disabled, [disabled] { pointer-events: none; }
 					}
@@ -193,8 +245,62 @@ html, body { margin: 0; font-family: Arial; }
 					text-align: center;
 				}
 			}
-			&.playerOne .playerMarker { left: -15px; }
-			&.playerTwo .playerMarker { right: -15px; }
+			.speechBubble {
+				z-index: 730;
+				position: absolute;
+				top: -70px;
+				width: 180px;
+				text-align: center;
+				background-color: #fff;
+				border: 5px solid #000;
+				border-radius: 30px;
+				transition: opacity .3s;
+				.inner {
+					position: relative;
+					margin: 15px;
+					/* CSS triangle */
+					&:after { 
+						content: '';
+						display: block;
+						position: absolute;
+						bottom: -32px;
+						width: 20px;
+						height: 20px; 
+					   background: #FFFFFF;
+					   border-right:5px solid #000;
+					   border-bottom:5px solid #000;
+					 	-moz-transform:rotate(45deg);
+					  	-webkit-transform:rotate(45deg);
+					}
+					p { font-weight: bold; }
+				}
+				&.popIn { 
+					animation: popIn 0.3s 1;
+					opacity: 1;
+				}
+				&.popOut {
+					animation: popOut 0.3s 1;
+					opacity: 0;
+				}
+				@keyframes popIn{
+				  50% { transform: scale(1.2); }
+				}
+				@keyframes popOut{
+				  50% { transform: scale(1.2); }
+				}	
+			}
+			&.playerOne {
+				.playerMarker { left: -15px; }
+				.speechBubble { right: -37px; 
+					.inner:after { left: 25px; }
+				}
+			}
+			&.playerTwo {
+				.playerMarker { right: -15px; }
+				.speechBubble { left: -37px;
+					.inner:after { right: 25px; }
+				}
+			}
 			.flashOverlay {
 				display: none;
 				z-index: 800;
@@ -218,7 +324,7 @@ html, body { margin: 0; font-family: Arial; }
 				&.slideUp {
 					opacity: 0;
 					transform: translateY(-200px);  
-					transition: .2s linear all;
+					transition: .6s ease-out all;
 				}
 			}
 			
@@ -235,7 +341,7 @@ html, body { margin: 0; font-family: Arial; }
 		    font-weight: bold;
 		}
 		.deck {
-			z-index: 710;
+			z-index: 610;
 			position: absolute;
 			top: 0;
 			width: 262px;
@@ -245,7 +351,7 @@ html, body { margin: 0; font-family: Arial; }
 				.deckCard.last.slideOut {
   					opacity: 0;
 					transform: translateX(300px);  
-  					transition: .3s linear all;
+  					transition: .6s ease-out all;
 				}
 			}
 			&.deckTwo { 
@@ -253,7 +359,7 @@ html, body { margin: 0; font-family: Arial; }
 				.deckCard.last.slideOut {
   					opacity: 0;
 					transform: translateX(-300px);  
-  					transition: .3s linear all;
+  					transition: .6s ease-out all;
 				}
 			}
 			.deckCard {
@@ -279,7 +385,7 @@ html, body { margin: 0; font-family: Arial; }
   					&.slideDown {
   						opacity: 1;
   						transform: translateY(300px);  
-  						transition: .3s linear all;
+  						transition: .6s ease-out all;
   					}
 				}
 				.inner {

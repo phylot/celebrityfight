@@ -18,6 +18,7 @@ export const cards = [
   "ability": "FORESIGHT",
   "abilityLabel": "Foresight",
   "abilityDescription": "See one random stat on your opponent's card",
+  "battlecry": "I'm the one. The Divine Being. Alpha and Omega.",
   "image": "/client/img/freeman.jpg"
 },
 {
@@ -30,7 +31,13 @@ export const cards = [
       {"attribute":"intelligence","value":78,"label":"Intelligence"},
       {"attribute":"speed","value":85,"label":"Speed"}
   ],
-  "abilityPresent": false,
+  "abilityPresent": true,
+  "abilityUsed": false,
+  "abilityType": "STRENGTHDAMAGE",
+  "ability": "BASTARDPUNCH",
+  "abilityLabel": "Bastard Punch",
+  "abilityDescription": "Permanently half the strength of your opponent's current card",
+  "battlecry": "Bloody 'av that y' bastard...",
   "image": "/client/img/bean.jpg"
 },
 {
@@ -39,7 +46,7 @@ export const cards = [
   "name": "Jean-Luc Picard",
   "stats": [
       {"attribute":"age","value":58,"label":"Age"},
-      {"attribute":"strength","value":70,"label":"Strength"},
+      {"attribute":"strength","value":74,"label":"Strength"},
       {"attribute":"intelligence","value":98,"label":"Intelligence"},
       {"attribute":"speed","value":55,"label":"Speed"}
   ],
@@ -49,6 +56,7 @@ export const cards = [
   "ability": "FORESIGHT",
   "abilityLabel": "Foresight",
   "abilityDescription": "See one random stat on your opponent's card",
+  "battlecry": "Make it so.",
   "image": "/client/img/picard.jpg"
 },
 {
@@ -76,10 +84,11 @@ export const cards = [
   ],
   "abilityPresent": true,
   "abilityUsed": false,
-  "abilityType": "STRENGTHREDUCER",
+  "abilityType": "STRENGTHDAMAGE",
   "ability": "RAPTORATTACK",
   "abilityLabel": "Raptor Attack",
   "abilityDescription": "Permanently half the strength of your opponent's current card",
+  "battlecry": "Life, uh... finds a way",
   "image": "/client/img/goldblum.jpg"
 },
 {
@@ -105,7 +114,13 @@ export const cards = [
       {"attribute":"intelligence","value": 92,"label":"Intelligence"},
       {"attribute":"speed","value": 96,"label":"Speed"}
   ],
-  "abilityPresent": false,
+  "abilityPresent": true,
+  "abilityUsed": false,
+  "abilityType": "STRENGTHDAMAGE",
+  "ability": "JUDOCHOP",
+  "abilityLabel": "Judo Chop",
+  "abilityDescription": "Permanently half the strength of your opponent's current card",
+  "battlecry": "Judo... Chop!",
   "image": "/client/img/brosnan.jpg"
 },
 {
@@ -144,7 +159,13 @@ export const cards = [
       {"attribute":"intelligence","value":82,"label":"Intelligence"},
       {"attribute":"speed","value":54,"label":"Speed"}
   ],
+  "abilityPresent": true,
+  "abilityUsed": false,
+  "abilityType": "STRENGTHDAMAGE",
   "ability": "FACEANDARMS",
+  "abilityLabel": "Face & Arms Punch",
+  "abilityDescription": "Permanently half the strength of your opponent's current card",
+  "battlecry": "I will punch you in the face and arms!",
   "image": "/client/img/kennedy.jpg"
 },
 {
@@ -228,6 +249,7 @@ export const cards = [
   "ability": "FORESIGHT",
   "abilityLabel": "Foresight",
   "abilityDescription": "See one random stat on your opponent's card",
+  "battlecry": "It's not easy being drunk all the time. Everyone would do it if it were easy.",
   "image": "/client/img/tyrion.jpg"
 },
 {
@@ -259,6 +281,7 @@ export const cards = [
   "ability": "FORESIGHT",
   "abilityLabel": "Foresight",
   "abilityDescription": "See one random stat on your opponent's card",
+  "battlecry": "It is the future you see...",
   "image": "/client/img/yoda.jpg"
 },
 {
@@ -271,7 +294,13 @@ export const cards = [
       {"attribute":"intelligence","value":91,"label":"Intelligence"},
       {"attribute":"speed","value":43,"label":"Speed"}
   ],
-  "abilityPresent": false,
+  "abilityPresent": true,
+  "abilityUsed": false,
+  "abilityType": "STRENGTHDAMAGE",
+  "ability": "FORCECHOKE",
+  "abilityLabel": "Force Choke",
+  "abilityDescription": "Permanently half the strength of your opponent's current card",
+  "battlecry": "I find your lack of faith disturbing...",
   "image": "/client/img/vader.jpg"
 },
 {
