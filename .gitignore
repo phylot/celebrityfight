@@ -8,5 +8,8 @@ yarn-error.log*
 # Dependency directories
 node_modules/
 
+# Distrubution directory
+dist/
+
 # My TODO List :)
 todo.txt

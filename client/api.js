@@ -19,7 +19,7 @@ export const cards = [
   "abilityLabel": "Foresight",
   "abilityDescription": "See one random stat on your opponent's card",
   "battlecry": "I'm the one. The Divine Being. Alpha and Omega.",
-  "image": "/client/img/freeman.jpg"
+  "image": "img/freeman.jpg"
 },
 {
   "number": "002",
@@ -34,11 +34,11 @@ export const cards = [
   "abilityPresent": true,
   "abilityUsed": false,
   "abilityType": "STRENGTHDAMAGE",
-  "ability": "BASTARDPUNCH",
-  "abilityLabel": "Bastard Punch",
+  "ability": "NORTHERNPUNCH",
+  "abilityLabel": "Northern Punch",
   "abilityDescription": "Permanently half the strength of your opponent's current card",
-  "battlecry": "Bloody 'av that y' bastard...",
-  "image": "/client/img/bean.jpg"
+  "battlecry": "av that y' bugger",
+  "image": "img/bean.jpg"
 },
 {
   "number": "003",
@@ -57,7 +57,7 @@ export const cards = [
   "abilityLabel": "Foresight",
   "abilityDescription": "See one random stat on your opponent's card",
   "battlecry": "Make it so.",
-  "image": "/client/img/picard.jpg"
+  "image": "img/picard.jpg"
 },
 {
   "number": "004",
@@ -66,11 +66,11 @@ export const cards = [
   "stats": [
       {"attribute":"age","value": 38,"label":"Age"},
       {"attribute":"strength","value": 90,"label":"Strength"},  
-      {"attribute":"intelligence","value": 85,"label":"Intelligence"},
+      {"attribute":"intelligence","value": 88,"label":"Intelligence"},
       {"attribute":"speed","value": 84,"label":"Speed"}
   ],
   "ability": "LEGUP",
-  "image": "/client/img/riker.jpg"
+  "image": "img/riker.jpg"
 },
 {
   "number": "005",
@@ -89,7 +89,7 @@ export const cards = [
   "abilityLabel": "Raptor Attack",
   "abilityDescription": "Permanently half the strength of your opponent's current card",
   "battlecry": "Life, uh... finds a way",
-  "image": "/client/img/goldblum.jpg"
+  "image": "img/goldblum.jpg"
 },
 {
   "number": "006",
@@ -102,7 +102,7 @@ export const cards = [
       {"attribute":"speed","value": 93,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/willsmith.jpg"
+  "image": "img/willsmith.jpg"
 },
 {
   "number": "007",
@@ -120,8 +120,8 @@ export const cards = [
   "ability": "JUDOCHOP",
   "abilityLabel": "Judo Chop",
   "abilityDescription": "Permanently half the strength of your opponent's current card",
-  "battlecry": "Judo... Chop!",
-  "image": "/client/img/brosnan.jpg"
+  "battlecry": "The name's Bond... James Bond",
+  "image": "img/brosnan.jpg"
 },
 {
   "number": "008",
@@ -134,7 +134,7 @@ export const cards = [
       {"attribute":"speed","value":91,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/vin.jpg"
+  "image": "img/vin.jpg"
 },
 {
   "number": "009",
@@ -147,7 +147,7 @@ export const cards = [
       {"attribute":"speed","value": 63,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/randy.jpg"
+  "image": "img/randy.jpg"
 },
 {
   "number": "010",
@@ -162,11 +162,11 @@ export const cards = [
   "abilityPresent": true,
   "abilityUsed": false,
   "abilityType": "STRENGTHDAMAGE",
-  "ability": "FACEANDARMS",
-  "abilityLabel": "Face & Arms Punch",
+  "ability": "MEGAPUNCH",
+  "abilityLabel": "Mega Punch",
   "abilityDescription": "Permanently half the strength of your opponent's current card",
   "battlecry": "I will punch you in the face and arms!",
-  "image": "/client/img/kennedy.jpg"
+  "image": "img/kennedy.jpg"
 },
 {
   "number": "011",
@@ -179,7 +179,7 @@ export const cards = [
       {"attribute":"speed","value":20,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/bishop.jpg"
+  "image": "img/bishop.jpg"
 },
 {
   "number": "012",
@@ -192,7 +192,7 @@ export const cards = [
       {"attribute":"speed","value":88,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/shia.jpg"
+  "image": "img/shia.jpg"
 },
 {
   "number": "013",
@@ -205,7 +205,7 @@ export const cards = [
       {"attribute":"speed","value":80,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/wheaton.jpg"
+  "image": "img/wheaton.jpg"
 },
 {
   "number": "014",
@@ -218,7 +218,7 @@ export const cards = [
       {"attribute":"speed","value":100,"label":"Speed"}
   ],
   "ability": "DRAGONATTACK",
-  "image": "/client/img/daenerys.jpg"
+  "image": "img/daenerys.jpg"
 },
 {
   "number": "015",
@@ -231,7 +231,7 @@ export const cards = [
       {"attribute":"speed","value":91,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/jonsnow.jpg"
+  "image": "img/jonsnow.jpg"
 },
 {
   "number": "016",
@@ -250,7 +250,7 @@ export const cards = [
   "abilityLabel": "Foresight",
   "abilityDescription": "See one random stat on your opponent's card",
   "battlecry": "It's not easy being drunk all the time. Everyone would do it if it were easy.",
-  "image": "/client/img/tyrion.jpg"
+  "image": "img/tyrion.jpg"
 },
 {
   "number": "017",
@@ -263,7 +263,7 @@ export const cards = [
       {"attribute":"speed","value":28,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/dench.jpg"
+  "image": "img/dench.jpg"
 },
 {
   "number": "018",
@@ -282,7 +282,7 @@ export const cards = [
   "abilityLabel": "Foresight",
   "abilityDescription": "See one random stat on your opponent's card",
   "battlecry": "It is the future you see...",
-  "image": "/client/img/yoda.jpg"
+  "image": "img/yoda.jpg"
 },
 {
   "number": "019",
@@ -301,7 +301,7 @@ export const cards = [
   "abilityLabel": "Force Choke",
   "abilityDescription": "Permanently half the strength of your opponent's current card",
   "battlecry": "I find your lack of faith disturbing...",
-  "image": "/client/img/vader.jpg"
+  "image": "img/vader.jpg"
 },
 {
   "number": "020",
@@ -314,5 +314,5 @@ export const cards = [
       {"attribute":"speed","value":89,"label":"Speed"}
   ],
   "abilityPresent": false,
-  "image": "/client/img/ripley.jpg"
+  "image": "img/ripley.jpg"
 }];

@@ -2,6 +2,10 @@
 
 A "Top Trumps" style card game involving celebrities against their will. Created using React, Webpack, and Babel.
 
+## Live Demo
+
+[Demo (robmarriott.com/celebrityfight)](http://www.robmarriott.com/celebrityfight)
+
 ## Getting Started
 
 - Pull repository at https://github.com/sleepypeepee/celebrityfight.git

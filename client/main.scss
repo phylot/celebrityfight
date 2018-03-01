@@ -183,9 +183,11 @@ html, body { margin: 0; font-family: Arial; }
 							height: 54px;
 							font-size: 14px;
 							font-weight: bold;
-							background-color: LightBlue;
-							text-shadow: 0 1px #daedf2;
-							&:hover { background-color: #bfe6f2; }
+							color: #fff;
+							background-color: #902edb;
+							text-shadow: 0 -1px #46166b;
+							&:hover { background-color: #a556e2; }
+							&:disabled, [disabled] { color: #b19cc1; }
 						}
 					   .statValue {
 					   	position: relative;

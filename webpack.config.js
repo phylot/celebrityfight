@@ -5,13 +5,14 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({ // Define below in 'plug
   filename: 'index.html',
   inject: 'body'
 });
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
   entry: './client/index.js',
   output: {
-    path: path.resolve('dist'),
-    filename: 'index_bundle.js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'js/index_bundle.js'
   },
   module: {
     rules: [
@@ -43,7 +44,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        // use:['style-loader', 'css-loader', 'sass-loader'] // TODO: Should this bundle all CSS into single file? Currently dumps CSS into head <style> tags
+        // use:['style-loader', 'css-loader', 'sass-loader'] // TODO: Should this bundle all CSS into single file? Currently dumps CSS into HTML head
         use: [{
           loader: 'style-loader', // inject CSS to page
         }, {
@@ -70,6 +71,9 @@ module.exports = {
       jQuery: 'jquery',
       $: 'jquery',
       jquery: 'jquery'
-    })
+    }),
+    new CopyWebpackPlugin([
+      {from:'client/img',to:'img'} 
+    ]), 
   ]
 }
