@@ -356,8 +356,10 @@ export class Game extends React.Component {
 			<div>
 				<Modal visible={this.state.modalVisible} content={this.state.modalContent} 
 				onClick={(this.state.modalContent.closeButton ? this.hideModal : this.resetGame)} />
+				<div className='header'>
+					<h1 className='logo'>CELEBRITY<span>FIGHT</span></h1>
+				</div>
 				<div className='gameBoard'>
-					<h1 className='mainHeading'>CELEBRITY<span>FIGHT</span></h1>
 					{this.renderCards(cards)}
 				</div>
 			</div>

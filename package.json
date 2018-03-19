@@ -25,11 +25,13 @@
     "precss": "^2.0.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
+    "url-loader": "^1.0.1",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
     "jquery": "^3.2.1",
+    "normalize.css": "^8.0.0",
     "path": "^0.12.7",
     "popper.js": "^1.12.9",
     "react": "^16.2.0",

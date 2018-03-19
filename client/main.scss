@@ -1,29 +1,93 @@
-html, body { margin: 0; font-family: Arial; }
+html, body { 
+	position: relative;
+	height: 100%;
+	overflow-x: hidden;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+	color: #000;
+}
 .center { text-align: center; }
-.mainHeading { 
-	z-index: 200;
-	margin: 0 0 40px 0; 
-	padding: 40px 0 0 0; 
+
+/* WEB FONTS */
+@font-face {
+	font-family: 'impactreg';
+	src: url('fonts/impactreg.eot');
+	src: local('impactreg'), url('fonts/impactreg.woff') format('woff'), url('fonts/impactreg.ttf') format('truetype');
+}
+
+/* MIXINS */
+@mixin opacity-mixin($value) {
+	-ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=$value)';
+	filter: alpha(opacity=$value);
+	-moz-opacity: $value;
+	-khtml-opacity: $value;
+	opacity: $value;
+}
+@mixin transition-mixin($rule) {
+	-webkit-transition: $rule;
+	-moz-transition: $rule;
+	-o-transition: $rule;
+	transition: $rule;
+}
+@mixin transform-mixin($rule) {
+	-webkit-transform: $rule;
+	-moz-transform: $rule;
+	-ms-transform: $rule;
+	-o-transform: $rule;
+	transform: $rule;
+}
+@mixin animation-mixin($rule) {
+	-webkit-animation: $rule;
+	-moz-animation: $rule;
+	-o-animation: $rule;
+	animation: $rule;
+}
+@mixin logo-mixin($rotate, $scale) {
 	text-align: center;
+	letter-spacing: 10px;
+	text-indent: 10px;
+	font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
 	font-size: 15px;
 	font-weight: normal;
-	letter-spacing: 10px;
+	@if $rotate and $scale != '' {
+		@include transform-mixin(rotate(-10deg) scale($scale));
+	} @else if $rotate and $scale == '' {
+		@include transform-mixin(rotate(-10deg));
+	} @else {
+		@include transform-mixin(scale($scale));
+	}
 	span {
 		display: block;
 		margin: 0 auto;
 		text-align: center;
-		font-family: Impact;
+		font-family: 'impactreg';
 		font-size: 56px;
 		font-weight: bold;
 	}
 }
 
+/* MAIN LAYOUT */
+.header { 
+	z-index: 200;
+	margin: 0;
+	background-color: #000;
+	.logo {
+		margin: 0;
+		color: #fff;
+	   @include logo-mixin(false, 0.7);
+	}
+	
+}
+
 .gameBoard {
 	z-index: 100;
-	margin: 0;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 640px;
+	height: 384px;
+	margin: -192px 0 0 -320px;
 	.cardContainer {
 		position: relative;
-		width: 640px;
 		margin: 0 auto;
 		.card {
 			z-index: 600;
@@ -41,56 +105,33 @@ html, body { margin: 0; font-family: Arial; }
 				height: 384px;
 				color: #d3d3d3;
 				.inner {
-					width: 250px;
 					height: 374px;
 					border: 5px dashed #d3d3d3;
 					.cardLogo {
-						transform: rotate(-10deg);
 						margin-top: 130px;
-						text-align: center;
-						font-size: 15px;
-						font-weight: normal;
-						letter-spacing: 10px;
-						span {
-							display: block;
-							margin: 0 auto;
-							text-align: center;
-							font-family: Impact;
-							font-size: 56px;
-							font-weight: bold;
-						}
+	  	 				@include logo-mixin(true, '');
 					}
 				}
 			}
 			.front { 
 				border: 5px solid #fff;
 				background-color: #f2f2f2;
+				-webkit-box-shadow: 0px 0px 28px #000;
+				-moz-box-shadow: 0px 0px 28px #000;
 				box-shadow: 0px 0px 28px #000;
 			}
 			.back { 
 				border: 5px solid #000;
 				background-color: #fff;
-				/*overflow: hidden;*/
+				overflow: hidden;
 				.cardLogo {
 					z-index: 620;
-					transform: rotate(-10deg);
 					margin-top: 130px;
-					text-align: center;
-					font-size: 15px;
-					font-weight: normal;
-					letter-spacing: 10px;
-					span {
-						display: block;
-						margin: 0 auto;
-						text-align: center;
-						font-family: Impact;
-						font-size: 56px;
-						font-weight: bold;
-					}
+					@include logo-mixin(true, '');
 				}
 				.statContainer {
-					opacity: 0;
 					z-index: 630;
+					@include opacity-mixin(0);
 					position: absolute;
 					top: 15px;
 					left: 50px;
@@ -99,10 +140,10 @@ html, body { margin: 0; font-family: Arial; }
 					text-align: center;
 					background-color: LightGrey;
 					border: 5px solid #000;
-					transition: none; /* no animation on class removal */
+					@include transition-mixin(none); /* prevent animation on class removal */
 					&.visible{
-						opacity: 1;
-						transition: opacity .5s ease-in;
+						@include opacity-mixin(1);
+						@include transition-mixin(opacity .5s ease-in);
 					}
 					.statValue {
 						display: block;
@@ -111,7 +152,6 @@ html, body { margin: 0; font-family: Arial; }
 					}
 				}
 				.damageBox {
-					/*opacity: 0;*/
 					z-index: 640;
 					position: absolute;
 					width: 100%;
@@ -120,7 +160,7 @@ html, body { margin: 0; font-family: Arial; }
 					text-align: center;
 					font-weight: bold;
 					color: Red;
-					transtion: none;
+					@include transition-mixin(none); /* prevent animation on class removal */
 					p { margin: 4px; }
 					.damageValue {
 						position: relative;
@@ -132,11 +172,13 @@ html, body { margin: 0; font-family: Arial; }
 							left: -12px;
 						}
 					}
-					&.visible { opacity: 1; }
+					&.visible { 
+						@include opacity-mixin(1);
+					}
 					&.hide {
-						opacity: 0;
-						transform: translateY(-80px);
-						transition: 1s ease-out all;
+						@include opacity-mixin(0);
+						@include transform-mixin(translateY(-80px));
+						@include transition-mixin(1s ease-out all);
 					}
 				}
 			}
@@ -167,7 +209,7 @@ html, body { margin: 0; font-family: Arial; }
 						display: inline-block;
 						width: 110px;
 						margin: 5px;
-						padding: 10px 10px;
+						padding: 10px;
 						border: none;
 						text-align: center;
 						text-decoration: none;
@@ -194,11 +236,10 @@ html, body { margin: 0; font-family: Arial; }
 					   	display: block;
 					    	font-size: 14px;
 					    	font-weight: bold;
-					    	/*.decreasArrow { display: none; }*/
 					   }
 					   &:hover { background-color: #e0e0e0; }
 						&.green {
-							background-color: Green;
+							background-color: #6cc41f;
 							color: #fff;
 						}
 						&.red {
@@ -234,6 +275,8 @@ html, body { margin: 0; font-family: Arial; }
 				top: -15px;
 				width: 50px;
 				height: 50px;
+				-webkit-border-radius: 50%;
+				-moz-border-radius: 50%;
 				border-radius: 50%;
 				font-weight: bold;
 				color: #fff;
@@ -242,21 +285,23 @@ html, body { margin: 0; font-family: Arial; }
 					display: block;
 					width: 50px;
 					height: 50px;
-					font-size: 20px;
 					line-height: 50px;
 					text-align: center;
+					font-size: 20px;
 				}
 			}
 			.speechBubble {
-				z-index: 730;
+				z-index: 820;
 				position: absolute;
 				top: -70px;
 				width: 180px;
 				text-align: center;
 				background-color: #fff;
 				border: 5px solid #000;
+				-webkit-border-radius: 30px;
+				-moz-border-radius: 30px;
 				border-radius: 30px;
-				transition: opacity .3s;
+				@include transition-mixin("visibility .3s, opacity .3s");
 				.inner {
 					position: relative;
 					margin: 15px;
@@ -268,27 +313,32 @@ html, body { margin: 0; font-family: Arial; }
 						bottom: -32px;
 						width: 20px;
 						height: 20px; 
-					   background: #FFFFFF;
-					   border-right:5px solid #000;
-					   border-bottom:5px solid #000;
-					 	-moz-transform:rotate(45deg);
-					  	-webkit-transform:rotate(45deg);
+					   background: #fff;
+					   border-right: 5px solid #000;
+					   border-bottom: 5px solid #000;
+					  	@include transform-mixin(rotate(45deg));
 					}
 					p { font-weight: bold; }
 				}
 				&.popIn { 
-					animation: popIn 0.3s 1;
-					opacity: 1;
+					visibility: visible;
+					@include animation-mixin(popIn 0.3s 1);
+					@include opacity-mixin(1);
 				}
 				&.popOut {
-					animation: popOut 0.3s 1;
-					opacity: 0;
+					visibility: hidden;
+					@include animation-mixin(popOut 0.3s 1);
+					@include opacity-mixin(0);
 				}
 				@keyframes popIn{
-				  50% { transform: scale(1.2); }
+					50% { 
+						@include transform-mixin(scale(1.2));
+					}
 				}
 				@keyframes popOut{
-				  50% { transform: scale(1.2); }
+					50% { 
+						@include transform-mixin(scale(1.2));
+					}
 				}	
 			}
 			&.playerOne {
@@ -310,37 +360,39 @@ html, body { margin: 0; font-family: Arial; }
 				width: 100%;
 				height: 100%;
 				background-color: Red;
-				opacity: 0.5;
+				@include opacity-mixin(0.5);
 				&.blink {
 					display: block;
-					animation: blinker 0.2s linear infinite;
+					@include animation-mixin(blinker 0.2s linear infinite);
 				}
 				@keyframes blinker {  
-					50% { opacity: 0; }
+					50% { 
+						@include opacity-mixin(0);
+					}
 				}
 			}
 			.flip-container {
-				opacity: 1;
-				transform: translateX(0);
-				transition: none; /* no animation on class removal */
+				@include opacity-mixin(1);
+				@include transform-mixin(translateX(0));
+				@include transition-mixin(none); /* no animation on class removal */
 				&.slideUp {
-					opacity: 0;
-					transform: translateY(-200px);  
-					transition: .6s ease-out all;
+					@include opacity-mixin(0);
+					@include transform-mixin(translateY(-200px));
+					@include transition-mixin(.6s ease-out all);
 				}
 			}
 			
 		}
 		.cardSeperator {
-		    display: inline-block;
-		    vertical-align: top;
+			display: inline-block;
+			vertical-align: top;
 			width: 80px;
-		    height: 384px;
-		    line-height: 384px;
-		    text-align: center;
-		    font-family: Impact;
-		    font-size: 40px;
-		    font-weight: bold;
+			height: 384px;
+			line-height: 384px;
+			text-align: center;
+			font-family: 'impactreg';
+			font-size: 40px;
+			font-weight: bold;
 		}
 		.deck {
 			z-index: 610;
@@ -351,17 +403,17 @@ html, body { margin: 0; font-family: Arial; }
 			&.deckOne { 
 				left: -300px;
 				.deckCard.last.slideOut {
-  					opacity: 0;
-					transform: translateX(300px);  
-  					transition: .6s ease-out all;
+					@include opacity-mixin(0);
+					@include transform-mixin(translateX(300px));  
+  					@include transition-mixin(.6s ease-out all);
 				}
 			}
 			&.deckTwo { 
 				right: -300px;
 				.deckCard.last.slideOut {
-  					opacity: 0;
-					transform: translateX(-300px);  
-  					transition: .6s ease-out all;
+					@include opacity-mixin(0);
+					@include transform-mixin(translateX(-300px));  
+  					@include transition-mixin(.6s ease-out all);
 				}
 			}
 			.deckCard {
@@ -375,19 +427,19 @@ html, body { margin: 0; font-family: Arial; }
 					color: #d3d3d3;
 				}
 				&.last {
-					opacity: 1;
-					transform: translateX(0);
-  					transition: none; /* no animation on class removal */
+					@include opacity-mixin(1);
+					@include transform-mixin(translateX(0));
+  					@include transition-mixin(none); /* no animation on class removal */
 				}
 				&.animationCard {
-					opacity: 0;
+					@include opacity-mixin(0);
 					top: -300px;
 					left: 0;
-  					transition: none; /* no animation on class removal */
+  					@include transition-mixin(none); /* no animation on class removal */
   					&.slideDown {
-  						opacity: 1;
-  						transform: translateY(300px);  
-  						transition: .6s ease-out all;
+  						@include opacity-mixin(1);
+  						@include transform-mixin(translateY(300px));  
+  						@include transition-mixin(.6s ease-out all);
   					}
 				}
 				.inner {
@@ -395,20 +447,8 @@ html, body { margin: 0; font-family: Arial; }
 					height: 374px;
 					border: 5px solid #000;
 					.cardLogo {
-						transform: rotate(-10deg);
 						margin-top: 130px;
-						text-align: center;
-						font-size: 15px;
-						font-weight: normal;
-						letter-spacing: 10px;
-						span {
-							display: block;
-							margin: 0 auto;
-							text-align: center;
-							font-family: Impact;
-							font-size: 56px;
-							font-weight: bold;
-						}
+						@include logo-mixin(true, '');
 					}
 				}
 			}
@@ -427,28 +467,29 @@ html, body { margin: 0; font-family: Arial; }
 	.modal {
 		z-index: 910;
 		position: absolute;
-		top: 100px;
+		top: 50%;
+  		@include transform-mixin(translateY(-50%)); /* Center vertically */
 		left: 50%;
 		width: 500px;
 		margin-left: -270px;
 		padding: 20px;
 		text-align: center;
 		background-color: #fff;
+		-webkit-box-shadow:  0px 0px 40px black;
+		-moz-box-shadow:  0px 0px 40px black;
 		box-shadow:  0px 0px 40px black;
 		.button {
-		    display: inline-block;
-		    margin: 15px 2px;
-		    padding: 15px 32px;
-		    text-align: center;
-		    text-decoration: none;
-		    font-size: 16px;
-		    border: none;
-		    color: white;
-		    cursor: pointer;
+			display: inline-block;
+			margin: 15px 2px;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			font-size: 16px;
+			border: none;
+			color: white;
+			cursor: pointer;
 			background-color: #139cf2;
-			&:hover {
-				background-color: #3db0f7;
-			}
+			&:hover { background-color: #3db0f7; }
 		}
 	}
 }
@@ -456,12 +497,14 @@ html, body { margin: 0; font-family: Arial; }
 /* FLIP ANIMATION */
 /* entire container, keeps perspective */
 .flip-container {
+	-webkit-perspective: 1000px;
+	-moz-perspective: 1000px;
 	perspective: 1000px;
 }
 /* flip the pane when hovered */
 /*.flip-container:hover .flipper, .flip-container.hover .flipper, */
 .flip-container.flip .flipper {
-	transform: rotateY(180deg);
+	@include transform-mixin(rotateY(180deg));
 }
 
 /*.flip-container, .front, .back {
@@ -479,13 +522,16 @@ html, body { margin: 0; font-family: Arial; }
 
 /* flip speed goes here */
 .flipper {
-	transition: 0.6s;
+	@include transition-mixin(0.6s);
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
 	transform-style: preserve-3d;
 	position: relative;
 }
 
 /* hide back of pane during swap */
 .front, .back {
+	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
 	position: absolute;
 	top: 0;
@@ -496,10 +542,315 @@ html, body { margin: 0; font-family: Arial; }
 .front {
 	z-index: 2;
 	/* for firefox 31 */
-	transform: rotateY(0deg);
+	@include transform-mixin(rotateY(0deg));
 }
 
 /* back, initially hidden pane */
 .back {
-	transform: rotateY(180deg);
+	@include transform-mixin(rotateY(180deg));
+}
+
+/* RESPONSIVE LAYOUTS */
+
+@media all and (max-width: 1024px) and (orientation: portrait) { /* Portrait iPad Pro and below */
+/*	.gameBoard {
+	width: 260px;
+		height: 868px;
+		margin-top: -434px;
+		margin-left: -130px;
+	}
+	.gameBoard .cardContainer .card { 
+		display: block;
+		margin: 0;
+	}
+	.gameBoard .cardContainer .cardSeperator {
+		display: block;
+		width: auto;
+		height: 100px;
+		line-height: 100px;
+	}
+	.gameBoard .cardContainer .deck.deckTwo { 
+		top: auto;
+		bottom: 0;
+	}*/
+	.gameBoard {
+		width: 260px;
+		height: 868px;
+		margin-top: -434px;
+		margin-left: -130px;
+		.cardContainer {
+			.card { 
+				display: block;
+				margin: 0;
+			}
+			.cardSeperator {
+				display: block;
+				width: auto;
+				height: 100px;
+				line-height: 100px;
+			}
+			.deck.deckTwo { 
+				top: auto;
+				bottom: 0;
+			}
+		}
+	}
+}
+@media all and (max-width: 768px) and (orientation: portrait) { /* Portrait iPad and below */
+	.header { display: none; }
+	.gameBoard .cardContainer .card.playerOne .speechBubble { 
+		top: -25px;
+		right: auto;
+		left: -37px;
+	}
+	.gameBoard .cardContainer .card.playerOne .speechBubble .inner:after { 
+		left: auto;
+		right: 25px;
+	}
+}
+@media all and (max-width: 823px) and (orientation: landscape) { /* Landscape large phones and below (823px width - Pixel 2 XL) */
+	.header, .deck { display: none; }
+	.gameBoard {
+		width: 510px;
+		height: 280px;
+		margin-top: -140px;
+		margin-left: -255px;
+	}
+	.gameBoard .cardContainer .card { margin: 0; }
+	.gameBoard .cardContainer .card, 
+	.gameBoard .cardContainer .card .cardPlaceholder, 
+	.gameBoard .cardContainer .card .flip-container { 
+		width: 220px; 
+		height: 280px; 
+	}
+	.flip-container .front, .flip-container .back {
+		width: 210px;
+		height: 270px;
+	}
+	.gameBoard .cardContainer .card .cardPlaceholder .inner { height: 270px; }
+	.gameBoard .cardContainer .card .cardImage {
+		top: 15px;
+		left: 45px;
+		width: 120px;
+		height: 120px;
+	}
+	.gameBoard .cardContainer .card .cardStats { 
+		top: 135px;
+		width: 200px;
+	}
+	.gameBoard .cardContainer .card .cardStats p.cardNumber { display: none; }
+	.gameBoard .cardContainer .card .cardStats h1.cardTitle { margin: 10px 0 5px 0; }
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button { 
+		width: 90px;
+		padding: 5px; 
+	}
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button.abilityButton {
+		top: -115px;
+   	right: -15px;
+	}
+	.gameBoard .cardContainer .card .back .cardLogo,
+	.gameBoard .cardContainer .card .cardPlaceholder .inner .cardLogo { 
+		margin-top: 100px;
+		@include logo-mixin(true, 0.9);
+   }
+	.gameBoard .cardContainer .card .speechBubble { top: -25px; }
+   .gameBoard .cardContainer .card .back .statContainer { left: 30px; }
+	.gameBoard .cardContainer .cardSeperator {
+		width: 70px;
+		height: 280px;
+		line-height: 280px;
+		font-size: 34px;
+	}
+}
+@media all and (max-width: 420px) and (orientation: portrait) { /* Portrait large phones and below */
+	.deck { display: none; }
+	.overlay .modal { 
+		width: 300px;
+		margin-left: -170px;
+	}
+	.gameBoard {
+		width: 280px;
+		height: 580px;
+		margin-top: -290px;
+		margin-left: -140px;
+	}
+	.gameBoard .cardContainer .card, 
+	.gameBoard .cardContainer .card .cardPlaceholder, 
+	.gameBoard .cardContainer .card .flip-container { 
+		width: 180px; 
+		height: 265px;
+	}
+	.flip-container .front, .flip-container .back { 
+		width: 170px;
+		height: 255px;
+	}
+	.gameBoard .cardContainer .card .cardPlaceholder .inner { height: 255px; }
+	.gameBoard .cardContainer .card.playerTwo .playerMarker {
+		right: auto;
+		left: -15px;
+	}
+	.gameBoard .cardContainer .card .cardImage {
+		top: 10px;
+		left: 15px;
+		width: 140px;
+		height: 140px;
+	}
+	.gameBoard .cardContainer .card .cardStats { 
+		top: 150px;
+		left: 0;
+		width: 170px;
+	}
+	.gameBoard .cardContainer .card .cardStats h1.cardTitle { 
+		margin: 10px; 
+		white-space: normal;
+	}
+	.gameBoard .cardContainer .card .cardStats .cardButtons { 
+		position: absolute;
+		width: 100px;
+		height: 265px;
+		left: 175px;
+		top: -155px;
+		background-color: #fff;
+	}
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button { 
+		padding: 8px;
+		width: 100px;
+		margin: 5px 0 0 0	;
+	}
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button.abilityButton { 
+		top: auto;
+		bottom: 5px;
+		left: 0;
+		height: 55px;
+	}
+	.gameBoard .cardContainer .card .back .cardLogo,
+	.gameBoard .cardContainer .card .cardPlaceholder .inner .cardLogo { 
+		margin-top: 90px;
+    	margin-left: -6px;
+		@include logo-mixin(true, 0.8);
+	}
+	.gameBoard .cardContainer .card .back .statContainer { left: 10px; }
+	.gameBoard .cardContainer .cardSeperator {
+		width: 180px;
+		height: 50px;
+		line-height: 50px;
+		font-size: 24px;
+	}
+}
+
+@media all and (max-width: 640px) and (orientation: landscape) { /* Landscape small phones - MAYBE MAKE WIDTH EVEN SMALLER... 568px (iPhone 5/SE) */
+	.gameBoard {
+		width: 430px;
+		height: 250px;
+		margin-top: -125px;
+		margin-left: -215px;
+	}
+	.gameBoard .cardContainer .card, 
+	.gameBoard .cardContainer .card .cardPlaceholder, 
+	.gameBoard .cardContainer .card .flip-container { 
+		width: 180px; 
+		height: 250px; 
+	}
+	.flip-container .front, .flip-container .back {
+		width: 170px;
+		height: 240px;
+	}
+	.gameBoard .cardContainer .card .cardPlaceholder .inner { height: 240px; }
+	.gameBoard .cardContainer .card .cardImage {
+		top: 10px;
+		left: 30px;
+		width: 110px;
+		height: 110px;
+	}
+	.gameBoard .cardContainer .card .cardStats {
+	    top: 120px;
+	    width: 160px;
+	}
+	.gameBoard .cardContainer .card .cardStats h1.cardTitle { font-size: 16px; }
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button { 
+		width: 78px;
+		margin: 1px; 
+	}
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button.abilityButton {
+		top: -100px;
+	}
+	.gameBoard .cardContainer .card .back .cardLogo,
+	.gameBoard .cardContainer .card .cardPlaceholder .inner .cardLogo { 
+		margin-top: 80px;
+    	margin-left: -6px;
+		@include logo-mixin(true, 0.8);
+	}
+	.gameBoard .cardContainer .card .speechBubble { top: -15px; }
+	.gameBoard .cardContainer .card .back .statContainer { left: 10px; }
+	.gameBoard .cardContainer .cardSeperator {
+		height: 250px;
+		line-height: 250px;
+	}
+}
+
+@media all and (max-width: 384px) and (orientation: portrait) { /* Portrait small phones and below (384px is Nexus 4 width) */
+	.overlay .modal { 
+		width: 260px;
+		margin-left: -150px;
+	}
+	.gameBoard {
+		width: 260px;
+		height: 490px;
+		margin-top: -245px;
+		margin-left: -130px;
+	}
+	.gameBoard .cardContainer .card, 
+	.gameBoard .cardContainer .card .cardPlaceholder, 
+	.gameBoard .cardContainer .card .flip-container { 
+		width: 160px; 
+		height: 225px;
+	}
+	.flip-container .front, .flip-container .back { 
+		width: 150px;
+		height: 215px;
+	}
+	.gameBoard .cardContainer .card .cardPlaceholder .inner { height: 215px; }
+	.gameBoard .cardContainer .card.playerOne .speechBubble { 
+		top: -20px;
+		left: -20px;
+	}
+	.gameBoard .cardContainer .card.playerTwo .speechBubble { 
+		left: -20px;
+	}
+	.gameBoard .cardContainer .card .cardImage {
+		top: 5px;
+		left: 5px;
+	}
+	.gameBoard .cardContainer .card .cardStats { 
+		top: 145px;
+		width: 150px;
+	}
+	.gameBoard .cardContainer .card .cardStats p.cardNumber { 
+		margin: 5px 0 0 0;
+		font-size: 13px;
+	}
+	.gameBoard .cardContainer .card .cardStats h1.cardTitle { margin: 5px; }
+	.gameBoard .cardContainer .card .cardStats .cardButtons {
+		top: -150px;
+		left: 155px;
+		height: 225px;
+	}
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button { padding: 5px; }
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button.abilityButton { 
+		height: 39px;
+		font-size: 12px;
+	}
+	.gameBoard .cardContainer .card .back .cardLogo,
+	.gameBoard .cardContainer .card .cardPlaceholder .inner .cardLogo { 
+		margin-top: 65px;
+   	margin-left: -14px;
+		@include logo-mixin(true, 0.7);
+	}
+	.gameBoard .cardContainer .card .back .statContainer { width: 100px; }
+	.gameBoard .cardContainer .cardSeperator {
+		width: 160px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 20px;
+	}
 }

@@ -62,6 +62,14 @@ module.exports = {
         }, {
           loader: 'sass-loader' // compiles Sass to CSS
         }]
+      },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/, 
+        loader: 'url-loader'
       }
     ]
   },
@@ -73,7 +81,8 @@ module.exports = {
       jquery: 'jquery'
     }),
     new CopyWebpackPlugin([
-      {from:'client/img',to:'img'} 
-    ]), 
+      {from:'client/fonts',to:'fonts'},
+      {from:'client/img',to:'img'}
+    ])
   ]
 }
