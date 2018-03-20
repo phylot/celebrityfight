@@ -5,6 +5,7 @@ html, body {
 	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 	color: #000;
 }
+body { min-height: 560px; } /* Allows scrolling on limited-height screens */
 .center { text-align: center; }
 
 /* WEB FONTS */
@@ -22,7 +23,7 @@ html, body {
 	-khtml-opacity: $value;
 	opacity: $value;
 }
-@mixin transition-mixin($rule) {
+@mixin transition-mixin($rule...) {
 	-webkit-transition: $rule;
 	-moz-transition: $rule;
 	-o-transition: $rule;
@@ -123,7 +124,6 @@ html, body {
 			.back { 
 				border: 5px solid #000;
 				background-color: #fff;
-				overflow: hidden;
 				.cardLogo {
 					z-index: 620;
 					margin-top: 130px;
@@ -158,14 +158,14 @@ html, body {
 					top: 30px;
 					left: 0;
 					text-align: center;
-					font-weight: bold;
 					color: Red;
 					@include transition-mixin(none); /* prevent animation on class removal */
 					p { margin: 4px; }
 					.damageValue {
 						position: relative;
 						display: inline-block;
-						font-size: 24px;
+						font-size: 26px;
+						font-weight: bold;
 						.icon {
 							position: absolute;
 							top: 0;
@@ -221,15 +221,20 @@ html, body {
 							position: absolute;
 							display: block;
 							top: -120px;
-							right: -20px;
+							right: -15px;
 							height: 54px;
 							font-size: 14px;
 							font-weight: bold;
 							color: #fff;
 							background-color: #902edb;
-							text-shadow: 0 -1px #46166b;
 							&:hover { background-color: #a556e2; }
-							&:disabled, [disabled] { color: #b19cc1; }
+							&:disabled, [disabled] { 
+								color: #9379b2;
+								&.used {
+									color: #bfbfbf;
+									background-color: #9b9b9b;
+								}
+							}
 						}
 					   .statValue {
 					   	position: relative;
@@ -265,29 +270,39 @@ html, body {
 								.decreaseArrow { border-top-color: #fff; }
 							}
 						}
-						&:disabled, [disabled] { pointer-events: none; }
+						&:disabled, [disabled] { 
+							pointer-events: none;
+							cursor: not-allowed;
+						}
 					}
 				}
 			}
 			.playerMarker {
 				z-index: 810;
 				position: absolute;
-				top: -15px;
-				width: 50px;
-				height: 50px;
+				top: -20px;
+				width: 80px;
+				height: 80px;
 				-webkit-border-radius: 50%;
 				-moz-border-radius: 50%;
 				border-radius: 50%;
+				text-align: center;
+				font-size: 13px;
 				font-weight: bold;
 				color: #fff;
 				background-color: #139cf2;
-				span {
-					display: block;
-					width: 50px;
-					height: 50px;
-					line-height: 50px;
-					text-align: center;
-					font-size: 20px;
+				overflow: hidden;
+				.wrap {
+					position: absolute;
+					width: 80px;
+					height: 40px;
+					top: 50%; 
+					left: 0;
+					margin-top: -20px;
+					.deckCount {
+						display: block;
+						font-size: 22px;
+					}
 				}
 			}
 			.speechBubble {
@@ -301,7 +316,7 @@ html, body {
 				-webkit-border-radius: 30px;
 				-moz-border-radius: 30px;
 				border-radius: 30px;
-				@include transition-mixin("visibility .3s, opacity .3s");
+				@include transition-mixin(visibility .3s, opacity .3s);
 				.inner {
 					position: relative;
 					margin: 15px;
@@ -342,13 +357,13 @@ html, body {
 				}	
 			}
 			&.playerOne {
-				.playerMarker { left: -15px; }
+				.playerMarker { left: -20px; }
 				.speechBubble { right: -37px; 
 					.inner:after { left: 25px; }
 				}
 			}
 			&.playerTwo {
-				.playerMarker { right: -15px; }
+				.playerMarker { right: -20px; }
 				.speechBubble { left: -37px;
 					.inner:after { right: 25px; }
 				}
@@ -455,6 +470,7 @@ html, body {
 		}
 	}
 }
+
 /* MODAL */
 .overlay {
 	display: none;
@@ -551,32 +567,11 @@ html, body {
 }
 
 /* RESPONSIVE LAYOUTS */
-
 @media all and (max-width: 1024px) and (orientation: portrait) { /* Portrait iPad Pro and below */
-/*	.gameBoard {
-	width: 260px;
-		height: 868px;
-		margin-top: -434px;
-		margin-left: -130px;
-	}
-	.gameBoard .cardContainer .card { 
-		display: block;
-		margin: 0;
-	}
-	.gameBoard .cardContainer .cardSeperator {
-		display: block;
-		width: auto;
-		height: 100px;
-		line-height: 100px;
-	}
-	.gameBoard .cardContainer .deck.deckTwo { 
-		top: auto;
-		bottom: 0;
-	}*/
 	.gameBoard {
 		width: 260px;
-		height: 868px;
-		margin-top: -434px;
+		height: 848px;
+		margin-top: -424px;
 		margin-left: -130px;
 		.cardContainer {
 			.card { 
@@ -586,8 +581,8 @@ html, body {
 			.cardSeperator {
 				display: block;
 				width: auto;
-				height: 100px;
-				line-height: 100px;
+				height: 80px;
+				line-height: 80px;
 			}
 			.deck.deckTwo { 
 				top: auto;
@@ -609,6 +604,7 @@ html, body {
 	}
 }
 @media all and (max-width: 823px) and (orientation: landscape) { /* Landscape large phones and below (823px width - Pixel 2 XL) */
+	body { min-height: 300px; }
 	.header, .deck { display: none; }
 	.gameBoard {
 		width: 510px;
@@ -629,32 +625,33 @@ html, body {
 	}
 	.gameBoard .cardContainer .card .cardPlaceholder .inner { height: 270px; }
 	.gameBoard .cardContainer .card .cardImage {
-		top: 15px;
+		top: 10px;
 		left: 45px;
 		width: 120px;
 		height: 120px;
 	}
 	.gameBoard .cardContainer .card .cardStats { 
-		top: 135px;
+		top: 130px;
 		width: 200px;
 	}
 	.gameBoard .cardContainer .card .cardStats p.cardNumber { display: none; }
 	.gameBoard .cardContainer .card .cardStats h1.cardTitle { margin: 10px 0 5px 0; }
 	.gameBoard .cardContainer .card .cardStats .cardButtons .button { 
 		width: 90px;
-		padding: 5px; 
+		padding: 6px; 
 	}
 	.gameBoard .cardContainer .card .cardStats .cardButtons .button.abilityButton {
-		top: -115px;
+		top: -105px;
    	right: -15px;
 	}
 	.gameBoard .cardContainer .card .back .cardLogo,
 	.gameBoard .cardContainer .card .cardPlaceholder .inner .cardLogo { 
-		margin-top: 100px;
+		margin-top: 90px;
 		@include logo-mixin(true, 0.9);
    }
 	.gameBoard .cardContainer .card .speechBubble { top: -25px; }
    .gameBoard .cardContainer .card .back .statContainer { left: 30px; }
+   .gameBoard .cardContainer .card .back .damageBox { top: 10px; }
 	.gameBoard .cardContainer .cardSeperator {
 		width: 70px;
 		height: 280px;
@@ -662,7 +659,7 @@ html, body {
 		font-size: 34px;
 	}
 }
-@media all and (max-width: 420px) and (orientation: portrait) { /* Portrait large phones and below */
+@media all and (max-width: 414px) and (orientation: portrait) { /* Portrait large phones and below (414px width - iPhone 6/7/8 Plus) */
 	.deck { display: none; }
 	.overlay .modal { 
 		width: 300px;
@@ -687,7 +684,7 @@ html, body {
 	.gameBoard .cardContainer .card .cardPlaceholder .inner { height: 255px; }
 	.gameBoard .cardContainer .card.playerTwo .playerMarker {
 		right: auto;
-		left: -15px;
+		left: -20px;
 	}
 	.gameBoard .cardContainer .card .cardImage {
 		top: 10px;
@@ -725,11 +722,12 @@ html, body {
 	}
 	.gameBoard .cardContainer .card .back .cardLogo,
 	.gameBoard .cardContainer .card .cardPlaceholder .inner .cardLogo { 
-		margin-top: 90px;
+		margin-top: 80px;
     	margin-left: -6px;
 		@include logo-mixin(true, 0.8);
 	}
 	.gameBoard .cardContainer .card .back .statContainer { left: 10px; }
+   .gameBoard .cardContainer .card .back .damageBox { top: 10px; }
 	.gameBoard .cardContainer .cardSeperator {
 		width: 180px;
 		height: 50px;
@@ -738,7 +736,8 @@ html, body {
 	}
 }
 
-@media all and (max-width: 640px) and (orientation: landscape) { /* Landscape small phones - MAYBE MAKE WIDTH EVEN SMALLER... 568px (iPhone 5/SE) */
+@media all and (max-width: 640px) and (orientation: landscape) { /* Landscape small phones (640px width - Nexus 4, 568px width - iPhone 5/SE) */
+	body { min-height: 270px; }
 	.gameBoard {
 		width: 430px;
 		height: 250px;
@@ -756,14 +755,24 @@ html, body {
 		height: 240px;
 	}
 	.gameBoard .cardContainer .card .cardPlaceholder .inner { height: 240px; }
+	.gameBoard .cardContainer .card .playerMarker { 
+		width: 70px;
+		height: 70px;
+		font-size: 12px;
+		.wrap {
+			width: 70px;
+			.playerName { margin-top: 3px; }
+			.deckCount{ font-size: 20px; }
+		}
+	}
 	.gameBoard .cardContainer .card .cardImage {
-		top: 10px;
+		top: 5px;
 		left: 30px;
 		width: 110px;
 		height: 110px;
 	}
 	.gameBoard .cardContainer .card .cardStats {
-	    top: 120px;
+	    top: 115px;
 	    width: 160px;
 	}
 	.gameBoard .cardContainer .card .cardStats h1.cardTitle { font-size: 16px; }
@@ -771,8 +780,9 @@ html, body {
 		width: 78px;
 		margin: 1px; 
 	}
-	.gameBoard .cardContainer .card .cardStats .cardButtons .button.abilityButton {
-		top: -100px;
+	.gameBoard .cardContainer .card .cardStats .cardButtons .button.abilityButton { 
+		top: -88px;
+		right: -11px;
 	}
 	.gameBoard .cardContainer .card .back .cardLogo,
 	.gameBoard .cardContainer .card .cardPlaceholder .inner .cardLogo { 
@@ -788,7 +798,8 @@ html, body {
 	}
 }
 
-@media all and (max-width: 384px) and (orientation: portrait) { /* Portrait small phones and below (384px is Nexus 4 width) */
+@media all and (max-width: 384px) and (orientation: portrait) { /* Portrait small phones and below (384px width - Nexus 4) */
+	body { min-height: 510px; }
 	.overlay .modal { 
 		width: 260px;
 		margin-left: -150px;
@@ -814,9 +825,7 @@ html, body {
 		top: -20px;
 		left: -20px;
 	}
-	.gameBoard .cardContainer .card.playerTwo .speechBubble { 
-		left: -20px;
-	}
+	.gameBoard .cardContainer .card.playerTwo .speechBubble { left: -20px; }
 	.gameBoard .cardContainer .card .cardImage {
 		top: 5px;
 		left: 5px;

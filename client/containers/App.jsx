@@ -60,13 +60,13 @@ export class Game extends React.Component {
 
 		return (
 			<div className='cardContainer'>
-				<Card cardData={deckOne[0]} styleName='playerOne' markerText='P1' 
+				<Card cardData={deckOne[0]} styleName='playerOne' markerText='Player 1' deckCount={deckOne.length} deckTotal={cards.length}
 				onClick={(stat, index) => this.handleClick(stat, index)} abilityClick={(card) => this.handleAbilityClick(card)}
 				disabled={cardOneDisabled} flipped={cardOneFlipped} flash={this.state.cardOneFlash} slideUp={cardOneSlideUp} 
 				randomStat={this.state.randomStat} statVisible={cardOneStatVisible} speechVisible={cardOneSpeechVisible} 
 				damage={this.state.cardDamage} damageVisible={cardOneDamageVisible} />
 				<div className='cardSeperator'>Vs</div>
-				<Card cardData={deckTwo[0]} styleName='playerTwo' markerText='P2' 
+				<Card cardData={deckTwo[0]} styleName='playerTwo' markerText='Player 2' deckCount={deckTwo.length} deckTotal={cards.length}	
 				onClick={(stat, index) => this.handleClick(stat, index)} abilityClick={(card) => this.handleAbilityClick(card)}
 				disabled={cardTwoDisabled} flipped={cardTwoFlipped} flash={this.state.cardTwoFlash} slideUp={cardTwoSlideUp} 
 				randomStat={this.state.randomStat} statVisible={cardTwoStatVisible} speechVisible={cardTwoSpeechVisible} 

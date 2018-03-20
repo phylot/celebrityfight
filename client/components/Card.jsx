@@ -30,7 +30,12 @@ export class Card extends React.Component {
 					<div className='flipper'>
 						<div className='front'>
 							<SpeechBubble visible={this.props.speechVisible} message={this.props.cardData.battlecry} />
-							<div className='playerMarker'><span>{this.props.markerText}</span></div>
+							<div className='playerMarker'>
+								<div className='wrap'>
+									<div className='playerName'>{this.props.markerText}</div>
+									<div className='deckCount'>{this.props.deckCount}/{this.props.deckTotal}</div>
+								</div>
+							</div>
 							<div className={'flashOverlay' + (this.props.flash ? ' blink' : '')}></div>
 							<img className='cardImage' key={this.props.cardData.image} src={this.props.cardData.image} alt={this.props.cardData.name} />
 							<div className='cardStats'>
@@ -39,6 +44,7 @@ export class Card extends React.Component {
 								<div className='cardButtons'>
 									{buttons}
 									<AbilityButton show={this.props.cardData.abilityPresent} disabled={this.props.disabled || this.props.cardData.abilityUsed} 
+									abilityUsed={this.props.cardData.abilityUsed}
 									onClick={() => this.props.abilityClick(this.props.cardData)} label={this.props.cardData.abilityLabel} 
 									title={this.props.cardData.abilityDescription} />
 								</div>

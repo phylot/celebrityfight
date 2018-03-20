@@ -5,7 +5,7 @@ function AbilityButton(props) {
 		return null;
 	}
 	return (
-		<button disabled={props.disabled} className={'button abilityButton'} onClick={props.onClick} title={props.title}>{props.label}</button>
+		<button disabled={props.disabled} className={'button abilityButton' + (props.abilityUsed ? ' used' : '')} onClick={props.onClick} title={props.title}>{props.label}</button>
 	)
 }
 
