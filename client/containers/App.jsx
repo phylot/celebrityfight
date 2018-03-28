@@ -89,8 +89,15 @@ export class Game extends React.Component {
 				playerOneDeck = cardDecks[0],
 				playerTwoDeck = cardDecks[1],
 				opponentDeck = playerTwoDeck,
+				cardImages = [],
 				winningDeck,
 				losingDeck;
+		// Populate cardImages array with image URLs, if available, ready for preloading
+		for (var i = 0; i < this.state.playerDecks.length; i++) {
+			if (this.state.playerDecks[i].length > 1) {
+				cardImages.push(this.state.playerDecks[i][1].image);
+			}
+		};
 
 		this.setState({ 
 			turnOpen: false,
@@ -151,7 +158,7 @@ export class Game extends React.Component {
 					randomStat: { statVisible: false }
 				});
 
-				if (opponentDeck.length < 2 && currentPlayerWin) { // If somebody loses the game ... TODO: Better logic
+				if (opponentDeck.length < 2 && currentPlayerWin) { // If somebody loses the game
 
 					setTimeout(() => { // Timeout, then show winning player modal, 4000ms
 						if (this.state.playerOneTurn) {
@@ -181,48 +188,51 @@ export class Game extends React.Component {
 					}, 4000);
 
 				} else {
-					// Animations and card array manipulation
-					setTimeout(() => { // Else no winner, timeout, then hide the player's card who's turn it isn't, 3000ms
-						this.setState({
-					  	showBothCards: false
-					  }, () => {
+					// Preload next card images
+  				preloadImages(cardImages, () => { 
+						// Animations and card array manipulation
+						setTimeout(() => { // Else no winner, timeout, then hide the player's card who's turn it isn't, 3000ms
+							this.setState({
+						  	showBothCards: false
+						  }, () => {
 
-					  	setTimeout(() => { // Timeout, then animate losing card vertically, 600ms
-					  		this.setState({
-							  	cardSlideUp: true
-							  }, () => {
+						  	setTimeout(() => { // Timeout, then animate losing card vertically, 600ms
+						  		this.setState({
+								  	cardSlideUp: true
+								  }, () => {
 
-							  	setTimeout(() => { // Timeout, then animate card entering winner's deck, 600ms
-										var wonCard = losingDeck[0]; // Copy won card from loser's deck
-										winningDeck.push(wonCard); // Add card to winner's deck
-						  			this.setState({
-									  	cardSlideDown: true
-									  }, () => {
+								  	setTimeout(() => { // Timeout, then animate card entering winner's deck, 600ms
+											var wonCard = losingDeck[0]; // Copy won card from loser's deck
+											winningDeck.push(wonCard); // Add card to winner's deck
+							  			this.setState({
+										  	cardSlideDown: true
+										  }, () => {
 
-											setTimeout(() => { // Timeout, then slideOut card animation, adjust card arrays accordingly, 1000ms
-												this.setState({ cardSlideOut: true });
-												
-												losingDeck.splice(0, 1); // Delete won card from loser's deck
-												winningDeck.push(winningDeck.shift()); // Put winner's current card to back of their deck
-												losingStat.lose = false; // Clear stat highlights
-												winningStat.win = false;
-												
-												setTimeout(() => { // Timeout, then update array states, remove slideOut animation CSS classes, next turn open, 600ms
-													this.setState({
-												  	playerDecks: [playerOneDeck, playerTwoDeck],
-												  	cardSlideUp: false,
-												  	cardSlideDown: false,
-												  	cardSlideOut: false,
-												  	turnOpen: true
-												  });
-												}, 600);
-											}, 1000);
-										});
-									}, 600);
-								});
-					  	}, 600);
-					  });
-					}, 3000);
+												setTimeout(() => { // Timeout, then slideOut card animation, adjust card arrays accordingly, 1000ms
+													this.setState({ cardSlideOut: true });
+													
+													losingDeck.splice(0, 1); // Delete won card from loser's deck
+													winningDeck.push(winningDeck.shift()); // Put winner's current card to back of their deck
+													losingStat.lose = false; // Clear stat highlights
+													winningStat.win = false;
+													
+													setTimeout(() => { // Timeout, then update array states, remove slideOut animation CSS classes, next turn open, 600ms
+														this.setState({
+													  	playerDecks: [playerOneDeck, playerTwoDeck],
+													  	cardSlideUp: false,
+													  	cardSlideDown: false,
+													  	cardSlideOut: false,
+													  	turnOpen: true
+													  });
+													}, 600);
+												}, 1000);
+											});
+										}, 600);
+									});
+						  	}, 600);
+						  });
+						}, 3000);
+					});
 				}
 			}, 2000);
 		});
@@ -290,7 +300,6 @@ export class Game extends React.Component {
 								this.setState({
 									cardDamage: {
 						      	visible: true,
-						      	// cardOne: this.state.playerOneTurn ? false : true,
 						      	statName: strengthAttribute[0].label,
 						      	damageValue: strengthReduction
 						      }
@@ -327,11 +336,8 @@ export class Game extends React.Component {
 			setTimeout(() => {
 				this.setState({
 					playerDecks: shuffleCards(),
-			    playerOneTurn: chooseLeadPlayer(),
-			    turnOpen: true,
-			    hideBothCards: false
+			    playerOneTurn: chooseLeadPlayer()
 			  }, () => {
-
 			  	this.setState({
 						modalVisible: true,
 					  modalContent: {
@@ -341,9 +347,23 @@ export class Game extends React.Component {
 					  	button: 'OK',
 					  	closeButton: true
 					  }
-					})
+					});
+			  	// Preload initial card images
+			  	var cardImages = [
+			  		this.state.playerDecks[0][0].image,
+			  		this.state.playerDecks[1][0].image
+			  	];
+			  	preloadImages(cardImages, () => {
+			  		setTimeout(() => {
+				  		this.setState({
+							  turnOpen: true,
+				    		hideBothCards: false
+							});
+						}, 300);
+			  	});
 			  });
 			}, 1000);
+
 		});
 	}
 
@@ -429,4 +449,24 @@ function compareCards(valueOne, valueTwo) { // Should this be a method of Game?
 function getRandomStat(stats) {
 	var randomStat = stats[Math.floor(Math.random()*stats.length)];
 	return randomStat;
+}
+
+function preloadImages(imgUrls, callback) {
+	var imageCount = imgUrls.length;
+	var imagesLoaded = 0;
+
+	for (var i = 0; i < imageCount; i++) {
+		var img = new Image();
+    img.onload = function() {
+      imagesLoaded++;
+      if (imagesLoaded == imageCount) {
+      	if (callback) {
+        	callback();
+        }
+      }
+    }
+    // TODO: Implement error handling
+    // img.onerror = function() {};
+		img.src = imgUrls[i];
+	}
 }

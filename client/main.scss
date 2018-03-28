@@ -682,6 +682,7 @@ body { min-height: 560px; } /* Allows scrolling on limited-height screens */
 		height: 255px;
 	}
 	.gameBoard .cardContainer .card .cardPlaceholder .inner { height: 255px; }
+	.gameBoard .cardContainer .card.playerOne .flip-container.slideUp { @include transform-mixin(translateY(200px)); }
 	.gameBoard .cardContainer .card.playerTwo .playerMarker {
 		right: auto;
 		left: -20px;
